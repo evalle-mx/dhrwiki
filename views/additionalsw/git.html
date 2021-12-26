@@ -66,6 +66,12 @@
             </code>
             </p>
 
+            
+            <p>
+                # return a previous version  <br/>
+                <code>$ git reset --hard c067ddd817133e50e912b5cd31964dbc315337af</code>
+            </p>
+
         </div>
     </div> <!-- //row -->
     <h3>Branching </h3>
@@ -119,11 +125,6 @@
                 <code>$ git push</code> <br/>
                 <code>$ git push --set-upstream origin branchName</code>
             </p>
-            
-            <p>
-                # return a previous version  <br/>
-                <code>$ git reset --hard c067ddd817133e50e912b5cd31964dbc315337af</code>
-            </p>
             <p>
                 #Release Remote repository <br/>
                 <code>$ git remote rm &lt;remote_Rep&gt; </code>
@@ -145,32 +146,15 @@ git diff master..<BRANCH_NAME> <FULL_PATH_FILENAME>
 #
 git diff --stat --color master..dothr_daemons
 git diff master..dothr_daemons pom.xml
-git diff master..dothr_daemons src/main/java/com/example/ec/ExplorecaliApplication.java
+git diff master..dothr_daemons src/main/java/com/example/ec/CLASE.java
 
 Nota: Con comparador git configurado* usar difftool en lugar de diff
 
 
 # Regresar codigo y Head a version solicitada
-git reset --hard 737040fb43356c675d2d44a7f4d9355415f12a1c
+git reset --hard 73704__________
 
 
-
-#Mostrar las ramas remotas
-$ git remote -v
-
-
-
-
-
-
-
-
-#Crear rama y cambiar Head a nueva rama (new_feature)
-git branch new_feature
-git checkout new_feature
-
-# Crear rama y cambiar Head un solo comando
-git checkout -b new_feature
 
 #Mostrar ramas
 git branch
@@ -183,8 +167,6 @@ git branch -d new_feature
 
 
 ######  Remoto/Colaborativo #####
-github: evalle-mx/Viol3t@2020/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
-
 
 git clone https://github.com/<GITHUB_ACCOUNT>/<PROJECT_NAME>.git
 
@@ -194,7 +176,7 @@ git push --set-upstream origin evalle
 *new Repository en GitHub as Public (Without ReadMe & .gitignore)
 
 #Create Default ReadMe for Cloud
-echo "# SpringB-Notifier" >> README.md
+echo "# MY PROJECT TITLE" >> README.md
 
 
 #Add and push remote repository (github)
@@ -237,7 +219,8 @@ git config user.email "MY_NAME@example.com"
 cat .git/config
 
 
-Para usar una herramienta de comparacion (como Meld en Linux), se puede configurar git: [https://stackoverflow.com/questions/34119866/setting-up-and-using-meld-as-your-git-difftool-and-mergetool]
+Para usar una herramienta de comparacion (como Meld en Linux), se puede configurar git:
+ [https://stackoverflow.com/questions/34119866/setting-up-and-using-meld-as-your-git-difftool-and-mergetool]
 $ gedit .gitconfig
 
 [diff]
