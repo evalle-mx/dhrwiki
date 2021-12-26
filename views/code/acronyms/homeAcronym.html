@@ -1,0 +1,25 @@
+<div class="container" ng-controller="acronymCtrl">
+    <div class="content-header">
+        <span class="content-title">Acronym List</span>
+    </div>
+    
+    
+    <div class="row " >
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" data-target="#itsec">IT Security</a></li>
+            <li><a data-toggle="tab" data-target="#amazon">AWS</a></li>
+
+        </ul>
+
+        <div class="tab-content">
+            <div id="itsec" class="tab-pane fade in active">
+                <acronym-security></acronym-security>
+            </div>
+            <div id="amazon" class="tab-pane fade">
+                <amazon></amazon>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /home/netto/app/webServer/PORTFOLIO/wikinetto/img/acronyms01.jpg -->
+<!-- AngularJS/Bootstrap tabs route conflict: https://cirovladimir.wordpress.com/2019/02/25/angularjs-bootstrap-tabs-route-conflict/ -->

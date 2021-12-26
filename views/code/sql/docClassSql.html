@@ -1,0 +1,33 @@
+<!-- <p>
+    <i class="sql-comment">/* XXXXX */</i>
+    <pre>
+yyyyyyyy
+</pre>
+</p>  -->
+
+<p>
+    <i class="sql-comment">/*  DOCUMENTO CLASIFICACION  */</i>
+<pre>
+select P.id_persona,P.id_estatus_inscripcion , DC.id_documento_clasificacion 
+from persona P 
+left outer join documento_clasificacion DC 
+on DC.id_persona=P.id_persona
+WHERE P.id_persona > 173
+and P.id_estatus_inscripcion in (3)
+and DC.id_documento_clasificacion  is null
+order by P.id_persona ;
+</pre>
+</p>
+
+
+<p>
+    <i class="code-danger">/**  *****  REINICIAR PARA SOLR Y DOCUMENTO CLASIFICACION  ****************** */</i>
+<pre>
+delete from documento_clasificacion; 
+ALTER SEQUENCE seq_Documento_Clasificacion RESTART WITH 1;
+ALTER SEQUENCE SEQ_CORE_CLASS RESTART WITH 1; /* Es el que usa el servicio solr como id */
+</pre>
+</p>
+
+
+

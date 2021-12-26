@@ -1,0 +1,64 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Mahout 0.9.0</h1>
+            
+            <p>
+
+                <pre>1. Download tar gz file.
+                    $ su dothr
+                    $ cd $HOME/app
+                    $ wget http://archive.apache.org/dist/mahout/0.9/mahout-distribution-0.9.tar.gz
+                    $ tar -zxvf mahout-distribution-0.9.tar.gz
+                    $ sudo mv mahout-distribution-0.9 /usr/lib/mahout
+                
+                2. Edit bashrc file
+                    $ sudo vim ~/.bashrc
+                
+                        # Mahout
+                        export MAHOUT_HOME=/usr/lib/mahout
+                        export PATH=$MAHOUT_HOME/bin:$PATH
+                
+                
+                        # Hadoop
+                        export HADOOP_PREFIX=/usr/local/hadoop
+                        export PATH=$HADOOP_PREFIX/bin:$PATH
+                    
+                    reload .bashrc
+                    $ . ~/.bashrc
+                
+                
+                3. Test it
+                
+                  debe estar Hadoop "arriba".
+                  Download file to test : synthetic_control.data from 
+                    http://archive.ics.uci.edu/ml/databases/synthetic_control/synthetic_control.data
+                
+                  to download this file into $HOME/app
+                
+                  Create folder testdata into hadoop(Hadoop), put downloaded file into:
+                    $ sudo - dothr
+                    $ hadoop dfs -mkdir /user/dothr/testdata
+                    $ hadoop dfs -put $HOME/app/synthetic_control.data /user/dothr/testdata
+                
+                  Now we will be apply CANOPY clustering:
+                    $ mahout org.apache.mahout.clustering.syntheticcontrol.canopy.Job
+                
+                  Generate a human readable file from this output:
+                
+                    $ mahout clusterdump --input /user/dothr/output/clusters-0-final \
+                    --pointsDir /user/dothr/output/clusteredPoints \
+                    --output $HOME/app/clusteranalyze.txt
+                
+                    $ gedit $HOME/app/clusteranalyze.txt
+                </pre>                
+            </p>
+            <!--<p>Reference: <br>
+                <a href="http://tuxdna.github.io/pages/mahout.html" target="_blank"> http://tuxdna.github.io/pages/mahout.html /</a>
+            </p>-->
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Mahout"; </script>

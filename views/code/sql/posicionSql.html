@@ -1,0 +1,122 @@
+<!-- <p>
+    <i class="sql-comment">/* XXXXX */</i>
+    <pre>
+yyyyyyyy
+</pre>
+</p>  -->
+
+<p>
+    <i class="sql-comment">/* RE-ASIGNAR POSICION A PERSONA */</i>
+    <pre>
+update posicion
+set id_persona = 7
+where id_posicion = 13;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* Listar posiciones */</i>
+    <pre>
+SELECT POS.id_posicion, POS.nombre as puesto, POS.id_estatus_posicion as idEstatus,
+POS.id_persona as idPersona, concat(PER.nombre, ' ', PER.apellido_paterno, ' ', PER.apellido_materno) as nombre
+from posicion as POS
+inner join persona PER on PER.id_persona = POS.id_persona
+inner join estatus_posicion ESTPOS ON ESTPOS.id_estatus_posicion = POS.id_estatus_posicion
+where POS.id_posicion is not null
+and POS.id_persona = 2 /* por persona */
+--and POS.id_estatus_posicion = 2
+order by id_posicion;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-comment">/* Modelos RSC-POS relacionados con posicion y rol */ </i>
+    <pre>
+select MPOS.id_modelo_rsc_pos, MPOS.id_perfil_posicion, POS.nombre, MPOS.id_rol, MPOS.nombre as nomMRSC, MPOS.descripcion, 
+MPOS.monitor as esDeMonitor, MPOS.principal, MPOS.activo,
+PER.id_persona as idPersona, concat(per.nombre, ' ', per.apellido_paterno, ' ', per.apellido_materno) as nombreMonitor
+from modelo_rsc_pos AS MPOS
+inner join perfil_posicion as PPOS on PPOS.id_perfil_posicion = MPOS.id_perfil_posicion
+inner join posicion as POS on PPOS.id_posicion = POS.id_posicion
+inner join persona as PER on PER.id_persona = POS.id_persona
+where MPOS.id_modelo_rsc_pos is not null
+--and POS.id_posicion = 72
+and POS.id_persona in (4)
+--and MPOS.id_rol is not null /* Para ver rol, hay que definirlo, null es para plantilla */
+;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Obtiene Fases MRSC por persona o posicion */</i>
+    <pre>
+SELECT MON.id_monitor, MON.id_modelo_rsc_pos_fase,  MRSCF.nombre as nombreFase, MON.principal, MON.id_relacion_empresa_persona, 
+concat(per.nombre, ' ', per.apellido_paterno, ' ', per.apellido_materno) as nombreMonitor, REP.id_persona,
+MRSCF.id_modelo_rsc_pos,
+MRSC.id_perfil_posicion,
+PPOS.id_posicion, POS.nombre
+from monitor as MON
+inner join relacion_empresa_persona as REP on MON.id_relacion_empresa_persona = REP.id_relacion_empresa_persona
+inner join persona PER on per.id_persona = REP.id_persona
+inner join modelo_rsc_pos_fase as MRSCF on MON.id_modelo_rsc_pos_fase = MRSCF.id_modelo_rsc_pos_fase
+inner join modelo_rsc_pos as MRSC on MRSC.id_modelo_rsc_pos = MRSCF.id_modelo_rsc_pos
+inner join perfil_posicion as PPOS on PPOS.id_perfil_posicion = MRSC.id_perfil_posicion
+inner join posicion as POS on PPOS.id_posicion = POS.id_posicion
+where MON.id_monitor is not null
+--and REP.id_persona = 4 /* Todas las fases MRSC de persona */ 
+and PPOS.id_posicion = 72 /* Todas las fases-monitor por posicion */
+;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* Datos en Habilidades de posicion */</i>
+<pre>
+select *
+from Politica_M_Habilidad pm, HABILIDADPOS hp, Dominio dom
+where pm.id_Habilidadpos = hp.id_habilidadpos
+AND dom.id_dominio = pm.id_dominio;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* Obtener lista de Habilidades por posicion */</i>
+<pre>
+select *
+from Politica_M_Habilidad pmh, Politica_Valor pv
+where pmh.id_politica_valor = pv.id_politica_valor
+and pv.id_posicion = 1;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* POLITICAS para Posicion */</i>
+<pre>
+select pv.id_politica_valor, pv.id_posicion, pv.id_politica, p.descripcion, p.clave_politica, p.tipo_valor, pv.id_concepto, con.descripcion
+from politica_valor pv
+inner join politica as p on pv.id_politica = p.id_politica
+inner join concepto as con on pv.id_concepto = con.id_concepto
+where pv.id_posicion = 10
+--and id_politica in (16, 28, 30,33)
+;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-comment">/** Todas Politicas */</i>
+    <pre>
+select *
+from 
+politica_escolaridad
+--politica_m_genero /* NO se ocupa */
+--politica_m_estado_civil /* NO se ocupa */
+--politica_M_Habilidad
+--politica_m_tipo_jornada /* NO se ocupa */
+</pre>
+</p> 
+
+
+<hr>
+<a href="docs/sql/SQL-BorrarPosicion.txt" target="_blank">Borrar Posicion</a>

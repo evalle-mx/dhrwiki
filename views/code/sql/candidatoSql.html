@@ -1,0 +1,312 @@
+<!-- <p>
+    <i class="sql-comment">/* XXXXX */</i>
+    <pre>
+yyyyyyyy
+</pre>
+</p>  -->
+
+<p>
+    <i class="sql-comment">/*  ** distintos candidaturas por persona */</i>
+<pre>
+select distinct(CAND.id_candidato)
+from candidato as CAND
+inner join tracking_postulante TRPOS on TRPOS.id_candidato = CAND.id_candidato
+where CAND.id_persona = 128
+and CAND.id_posicion = 5;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-comment">/* HQL:</i>
+<pre>
+StringBuilder sb= new StringBuilder("select distinct(CAND.idCandidato) ")
+		.append(" from Candidato as CAND ")
+		.append(" inner join CAND.trackingPostulantes as TP ")
+		.append(" where CAND.persona.idPersona = :idPersona ")
+		.append(" and CAND.posicion.idPosicion = :idPosicion ");
+*/
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/*  BUSQUEDA EN CANDIDATO (para indexado o para Candidatos en Proceso  */</i>
+<pre>
+SELECT Cand.id_candidato as IdCand, Cand.id_persona as IdPersona, concat(Per.nombre,' ',Per.apellido_paterno) as nombre,
+Cand.confirmado, Cand.id_estatus_candidato as Estatus, ECand.descripcion as lbEstatus,
+Cand.id_estatus_operativo as E_Operativo, EOper.descripcion as lbEstOperativo
+from candidato as Cand
+INNER JOIN persona as Per ON Cand.id_persona = Per.id_persona
+INNER JOIN estatus_candidato as ECand ON Cand.id_estatus_candidato=ECand.id_estatus_candidato
+INNER JOIN estatus_operativo as EOper ON Cand.id_estatus_operativo=EOper.id_estatus_operativo
+where Cand.id_posicion = 5
+--AND Cand.id_candidato in (65, 27, 8, 131)
+--AND Cand.id_estatus_operativo !=1 /*  1=> solo indexado/busqueda, !1 = incluye en proceso y rechazados */
+--AND Cand.id_persona in (65, 30)
+--AND Cand.id_estatus_operativo = 7 AND Cand.confirmado is true /* Cand-Confirmados*/
+--AND Cand.id_estatus_operativo = 9 AND Cand.confirmado is false /* Seleccionado (preCand-Interno) */
+--AND Cand.id_estatus_operativo = 8 /* Cand-Descartados*/
+order by Cand.id_candidato--Cand.id_estatus_operativo desc;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/*  BUSQUEDA EN POSIBLE-CANDIDATO (preCandidato)  */</i>
+<pre>
+Pcand.id_tipo_posible_candidato, Pcand.confirmado
+from posible_candidato as Pcand
+INNER JOIN persona as PER ON Pcand.id_relacion_empresa_persona= PER.id_persona
+WHERE Pcand.id_perfil_posicion = 5
+ORDER BY Pcand.id_tipo_posible_candidato;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-comment">/* Tracking MOnitor (vista Contratante) [Dao.getByPostulante() ]QUERY HQL*/</i>
+<pre>
+SELECT TRKMON.id_tracking_monitor AS idTracking_Monitor, TRKPOST.id_tracking_postulante AS idTracking_Postulante,
+MRPOSF.id_modelo_rsc_pos_fase AS idMrsP_Fase, concat(EDOTRK.descripcion, '(',EDOTRK.id_estado_tracking, ')' ) AS EdoTrack,
+MRPOSF.nombre AS nombreFase, MRPOSF.descripcion AS descFase, MRPOSF.orden AS ordenFase, MRPOSF.actividad AS actFase,
+MRPOSF.subir_archivo AS pUpload, MRPOSF.bajar_archivo AS pDownload, MRPOSF.editar_comentario AS pComent,
+TRKMON.comentario AS stComentario, TRKMON.fecha_inicio AS fInicio, TRKMON.fecha_fin AS fFin, TRKMON.oculto AS oculto
+FROM tracking_monitor TRKMON 
+INNER JOIN monitor MON ON TRKMON.id_monitor = MON.id_monitor 
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase 
+INNER JOIN relacion_empresa_persona RELEMPER2 ON TRKMON.postulante = RELEMPER2.id_relacion_empresa_persona 
+LEFT OUTER JOIN tracking_postulante TRKPOST ON TRKMON.id_tracking_postulante = TRKPOST.id_tracking_postulante 
+INNER JOIN estado_tracking EDOTRK ON TRKMON.id_estado_tracking = EDOTRK.id_estado_tracking 
+WHERE
+--PER.id_persona is not null 
+PER.id_persona = 9
+AND RELEMPER2.id_relacion_empresa_persona IN (
+      SELECT DISTINCT REMPER_sb.id_relacion_empresa_persona 
+      FROM tracking_monitor TRKMON_sb 
+      INNER JOIN relacion_empresa_persona REMPER_sb ON TRKMON_sb.postulante = REMPER_sb.id_relacion_empresa_persona 
+      INNER JOIN tracking_postulante TRKPOST_sb ON TRKMON_sb.id_tracking_postulante = TRKPOST_sb.id_tracking_postulante 
+      INNER JOIN candidato CAND_sb ON TRKPOST_sb.id_candidato = CAND_sb.id_candidato 
+      WHERE CAND_sb.id_candidato= 65  )  -- 65/72
+order by TRKMON.id_tracking_monitor;
+</pre>
+</p> 
+
+
+
+<p>
+    <i class="sql-comment">/* Tracking MOnitor (vista Contratante) modificado para Actividades de NMonitores simultaneas */</i>
+<pre>
+SELECT TRKMON.id_tracking_monitor AS idTracking_Monitor, TRKPOST.id_tracking_postulante AS idTracking_Postulante,
+MRPOSF.id_modelo_rsc_pos_fase AS idMrsP_Fase, concat(EDOTRK.descripcion, '(',EDOTRK.id_estado_tracking, ')' ) AS EdoTrack,
+MRPOSF.nombre AS nombreFase, MRPOSF.descripcion AS descFase, MRPOSF.orden AS ordenFase, MRPOSF.actividad AS actFase,
+MRPOSF.subir_archivo AS pUpload, MRPOSF.bajar_archivo AS pDownload, MRPOSF.editar_comentario AS pComent,
+TRKMON.comentario AS stComentario, TRKMON.fecha_inicio AS fInicio, TRKMON.fecha_fin AS fFin, TRKMON.oculto AS oculto
+FROM tracking_monitor TRKMON 
+INNER JOIN monitor MON ON TRKMON.id_monitor = MON.id_monitor 
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase 
+INNER JOIN relacion_empresa_persona RELEMPER2 ON TRKMON.postulante = RELEMPER2.id_relacion_empresa_persona 
+LEFT OUTER JOIN tracking_postulante TRKPOST ON TRKMON.id_tracking_postulante = TRKPOST.id_tracking_postulante 
+INNER JOIN estado_tracking EDOTRK ON TRKMON.id_estado_tracking = EDOTRK.id_estado_tracking 
+WHERE
+TRKMON.id_tracking_monitor in(1,7,  9,15) -- Mariana,  Victor
+order by TRKMON.id_tracking_monitor;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-comment">/* Query simple para trackingPostulante */</i>
+<pre>
+select TP.*, MRPF.orden, MRPF.actividad
+from tracking_postulante as TP
+inner join modelo_rsc_pos_fase as MRPF on MRPF.id_modelo_rsc_pos_fase = TP.id_modelo_rsc_pos_fase
+--where TP.id_candidato = 72
+--and MRPF.orden = 4
+order by TP.id_tracking_postulante;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* Query reducido para obtener TrackingMonitor por Postulante, idPersona(monitor) y/o Fase */</i>
+<pre>
+select TM.id_tracking_monitor, TM.id_tracking_postulante, TM.id_estado_tracking, 
+TM.id_monitor,
+MRPOSF.nombre, MRPOSF.orden AS ordenFase, MRPOSF.actividad AS actFase,
+PER.id_persona, PER.email,
+TM.postulante
+from tracking_monitor as TM
+INNER JOIN monitor MON ON TM.id_monitor = MON.id_monitor 
+INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona
+
+where TM.postulante = 964
+--AND PER.id_persona = 8
+and MRPOSF.orden = 3
+order by TM.id_tracking_monitor;
+</pre>
+</p> 
+
+
+
+<p>
+    <i class="sql-comment">/* Query para obtener tracks de otros monitores y evaluar si estan completados */</i>
+<pre>
+SELECT TRKMON.id_tracking_monitor AS idTracking_Monitor, 
+MRPOSF.id_modelo_rsc_pos_fase AS idMrsP_Fase, 
+--concat(EDOTRK.descripcion, '(', EDOTRK.id_estado_tracking, ')' ) AS EdoTrack,
+EDOTRK.id_estado_tracking AS EdoTrack,
+MRPOSF.nombre AS nombreFase, MRPOSF.orden AS orden, MRPOSF.actividad AS actividad
+FROM tracking_monitor TRKMON 
+INNER JOIN monitor MON ON TRKMON.id_monitor = MON.id_monitor 
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase 
+INNER JOIN relacion_empresa_persona RELEMPER2 ON TRKMON.postulante = RELEMPER2.id_relacion_empresa_persona 
+--LEFT OUTER JOIN tracking_postulante TRKPOST ON TRKMON.id_tracking_postulante = TRKPOST.id_tracking_postulante 
+INNER JOIN estado_tracking EDOTRK ON TRKMON.id_estado_tracking = EDOTRK.id_estado_tracking 
+WHERE
+--PER.id_persona is not null 
+PER.id_persona != 9
+AND RELEMPER2.id_relacion_empresa_persona IN (
+      SELECT DISTINCT REMPER_sb.id_relacion_empresa_persona 
+      FROM tracking_monitor TRKMON_sb 
+      INNER JOIN relacion_empresa_persona REMPER_sb ON TRKMON_sb.postulante = REMPER_sb.id_relacion_empresa_persona 
+      INNER JOIN tracking_postulante TRKPOST_sb ON TRKMON_sb.id_tracking_postulante = TRKPOST_sb.id_tracking_postulante 
+      INNER JOIN candidato CAND_sb ON TRKPOST_sb.id_candidato = CAND_sb.id_candidato 
+      WHERE CAND_sb.id_candidato= 26  ) 
+order by TRKMON.id_tracking_monitor;
+</pre>
+</p> 
+
+
+
+<p>
+    <i class="sql-comment">/* Ver informacion de tracks por parametros */</i>
+<pre>
+select TM.id_tracking_monitor, TM.id_tracking_postulante, TM.id_estado_tracking, 
+TM.id_monitor,
+MRPOSF.nombre, MRPOSF.orden AS ordenFase, MRPOSF.actividad AS actFase,
+--PER.id_persona, PER.email,
+TM.postulante, TM.comentario
+from tracking_monitor as TM
+INNER JOIN monitor MON ON TM.id_monitor = MON.id_monitor 
+INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+where TM.postulante is not null
+--AND TM.postulante = 964
+--AND PER.id_persona = 8
+and MRPOSF.orden = 1
+order by TM.id_tracking_monitor;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* saber si es principal el monitor del tracking */</i>
+<pre>
+select TM.id_tracking_monitor, MON.id_monitor, MON.id_relacion_empresa_persona, PER.email, MON.principal
+from tracking_monitor as TM
+INNER JOIN monitor MON ON TM.id_monitor = MON.id_monitor 
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+where PER.id_persona = 8
+and TM.id_tracking_monitor = 9
+order by TM.id_tracking_monitor;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-comment">/* parche para resolver las estupideces de Octavio */</i>
+<pre>
+select TP.id_tracking_postulante, TP.id_candidato, CA.id_posicion
+from tracking_postulante as TP
+inner join candidato as CA on CA.id_candidato = TP.id_candidato
+order by TP.id_tracking_postulante;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment"></i>
+<pre>
+select distinct CA.id_posicion
+from tracking_postulante as TP
+inner join candidato as CA on CA.id_candidato = TP.id_candidato
+where TP.id_candidato = 72
+order by TP.id_tracking_postulante;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/*Obtiene IdPersona del Monitor Principal buscando por Postulante en TrackMonitor */</i>
+<pre>
+select distinct PER.id_persona
+--REP.id_relacion_empresa_persona
+--MON.*
+--TM.id_tracking_monitor, 
+--TM.*,
+from tracking_monitor as TM
+inner join monitor as MON on Mon.id_monitor = TM.id_monitor
+inner join relacion_empresa_persona as REP on REP.id_relacion_empresa_persona = MON.id_relacion_empresa_persona
+inner join persona as PER on PER.id_persona = REP.id_persona
+where postulante = 1029
+and MON.principal = true;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">Lista los Tracking (fases-actividad) para postulantes </i>
+<pre>
+select TM.id_tracking_monitor, TM.id_tracking_postulante, TM.id_estado_tracking, 
+TM.id_monitor,
+MRPOSF.nombre, MRPOSF.orden AS ordenFase, MRPOSF.actividad AS actFase,
+--PER.id_persona, PER.email,
+TM.postulante, TM.comentario
+from tracking_monitor as TM
+INNER JOIN monitor MON ON TM.id_monitor = MON.id_monitor 
+INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase
+INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+where TM.postulante is not null
+--AND TM.postulante = 64 /* ID persona de candidato */
+--AND PER.id_persona = 8 /* ID persona del monitor/contratante */
+and MRPOSF.orden = 1
+order by TM.id_tracking_monitor;
+</pre>
+</p> 
+
+
+<p>
+    <i class="sql-note">/*  Crear una vista para simplificar el query */</i>
+<pre>
+DROP VIEW v_trackcandidato;
+CREATE OR REPLACE VIEW v_trackcandidato AS
+    select TM.id_tracking_monitor, TM.id_tracking_postulante, TM.id_estado_tracking, TM.id_monitor, 
+    TM.fecha_inicio, TM.fecha_fin,
+    MRPOSF.nombre, MRPOSF.orden AS ordenFase, MRPOSF.actividad AS actFase, 
+    --PER.id_persona, PER.email, 
+    TM.postulante, TM.comentario
+    from tracking_monitor as TM
+    INNER JOIN monitor MON ON TM.id_monitor = MON.id_monitor 
+    INNER JOIN modelo_rsc_pos_fase MRPOSF ON MON.id_modelo_rsc_pos_fase = MRPOSF.id_modelo_rsc_pos_fase
+    INNER JOIN relacion_empresa_persona RELEMPER ON MON.id_relacion_empresa_persona = RELEMPER.id_relacion_empresa_persona 
+    INNER JOIN persona PER ON RELEMPER.id_persona=PER.id_persona 
+    where TM.postulante is not null
+    order by TM.id_tracking_monitor;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment"></i>
+<pre>
+/*
+update tracking_monitor
+set id_estado_tracking = 3
+where id_tracking_monitor in (5,14,23,28,29,41,42,54,55,67,68,84);
+*/
+</pre>
+</p> 

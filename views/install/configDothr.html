@@ -1,0 +1,75 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Configuraciones</h1>
+            
+            <p>
+                <b>Descargar y configurar (JDK, Project Facets, Targeted Runtime) en Eclipse los proyectos:</b>
+                <ul>
+                    <li>AppOperationalNoStructured</li>
+                    <li>AppOperationalStructured</li>
+                    <li>AppTransactionalStructured</li>
+                    <li>AppUI</li>
+                    <li>ClientFileTCE</li>
+                    <li>ClientRestTCE</li>
+                    <li>JpaTCEHiberPsg</li>
+                    <li>ComponentsSolr</li>
+                    <li>ClientSolr</li>
+                </ul>
+            </p>
+
+            <p>
+                <b>Generar la Base de datos "xe" usando scripts en</b>: <br>
+                ../Data/Postgre/Readme.txt
+            </p>
+
+            <p>
+                <h4> <b>Hadoop</b> </h4>
+                <pre>Se sube el modelo Dummy en la carpeta creada en el EC2 Modeler.
+                    Se sube el modelo en hadoop de hadoop. Recordando que el servidor de Hadoop debe estar arriba.
+                    
+                        $ hadoop dfs -mkdir /user/dothr/dothr-data
+                        $ hadoop dfs -put /home/dothr/svn/dothr_otros/modelos/modelo_dummy/coreModel  /user/dothr/dothr-data/	</pre>
+            </p>
+
+            <p>
+                <h4> <b>Solr</b> </h4>
+                <pre>1) Copy svn://66.135.55.150/svn/dothr_otros/Solr/Solr_4.6.1/solr.war into /opt/solr/webapps
+                    Ensure that these libs are included within this war file, if not, add them.
+                    
+                        commons-configuration-1.6.jar
+                        commons-math3-3.2.jar
+                        hadoop-core-1.2.1.jar
+                        mahout-core-0.9.jar
+                        mahout.math-0.9.jar
+                    
+                    Note : You can find these libs on 
+                        /user/lib/mahout
+                        /user/lib/mahout/lib
+                        /user/lib/mahout/hadoop
+                    
+                    Add folder "classes" and its contents (log4j.properties) into war file solr.war into "WEB-INF" directory
+                    
+                        $ sudo cp /home/dothr/svn/dothr_otros/Solr/Solr_4.6.1/solr.war /opt/solr/webapps
+                    
+                    2) Copy svn://66.135.55.150/dothr_otros/Solr/Solr_4.6.1/core into /opt/solr/solr
+                        $ sudo cp -r /home/dothr/svn/dothr_otros/Solr/Solr_4.6.1/core /opt/solr/solr/
+                    
+                    3) Copy svn://66.135.55.150/dothr_otros/Solr/Solr_4.6.1/coreModel into /opt/solr/solr
+                        $ sudo cp -r /home/dothr/svn/dothr_otros/Solr/Solr_4.6.1/coreModel /opt/solr/solr/
+                    
+                    4) delete /opt/solr/solr/collection1
+                        $ sudo rm -rdf /opt/solr/solr/collection1</pre>
+            </p>
+
+
+
+            <p>Reference: <br>
+                <a href="docs/instalaciones_ambiente.txt" target="_blank"> instalaciones_ambiente.txt </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Configuration DotHR"; </script>

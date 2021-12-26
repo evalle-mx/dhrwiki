@@ -1,0 +1,65 @@
+<!-- <p>
+    <i class="sql-comment">/* XXXXX */</i>
+    <pre>
+yyyyyyyy
+</pre>
+</p>  -->
+
+
+<p>
+    <i class="sql-comment">/* Listado de Notificaciones programadas (por enviar) */</i>
+<pre>
+SELECT 
+NP.id_notificacion_programada, NP.id_tipo_evento, 
+TE.clave_evento, TE.prioridad, TE.texto, NP.fecha_creacion, 
+NP.json, NP.intentos,  NP.enviada
+FROM notificacion_programada AS NP
+inner join tipo_evento TE on TE.id_tipo_evento = NP.id_tipo_evento
+WHERE NP.id_notificacion_programada is not null
+--AND NP.id_notificacion_programada = 3990
+--AND NP.enviada = false
+--AND NT.id_persona_receptor = 1498
+--AND NP.id_tipo_evento = 3 /* 3.confirmarInsc, 14.RecordarPublicacion, 1.publicaCV, 5.ModificaCvPers, 13.reiniciarPwd, 21.AdicionMonitor */
+ORDER BY NP.id_notificacion_programada;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Listado de Notificaciones (ya enviadas) */</i>
+<pre>
+SELECT NT.id_notificacion, 
+NT.id_tipo_evento, TE.id_categoria_evento, TE.clave_evento, TE.prioridad as prioridadEvento, 
+--TE.texto, /* el mismo ya en notificacion */
+NT.id_persona_receptor,
+-- NT.id_emisor, NT.tipo_emisor, /*no se ocupan, siempre es 0, sistema y no hay catalogo */
+NT.fecha_creacion, NT.lista_mecanismo_inmediato, NT.texto
+--NT.vista, NT.desplegada, NT.prioridad 
+from notificacion as NT
+inner join tipo_evento TE on TE.id_tipo_evento = NT.id_tipo_evento
+where  NT.id_notificacion is not null
+--AND NT.id_notificacion > 2344
+--AND NT.id_persona_receptor = 1498
+--AND NT.id_tipo_evento != 3 /* 3.confirmarInsc, 14.RecordarPublicacion, 1.publicaCV, 5.ModificaCvPers, 13.reiniciarPwd */
+;
+</pre>
+</p>
+
+
+<p>
+    <i class="sql-comment">-- Reiniciar Secuencias para Notificacion y Notificacion programada</i>
+<pre>
+ALTER SEQUENCE SEQ_NOTIFICACION_PROGRAMADA RESTART WITH 1;
+ALTER SEQUENCE SEQ_NOTIFICACION RESTART WITH 1;
+-- SELECT last_value FROM SEQ_NOTIFICACION_PROGRAMADA;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Modificar notificacion_programada existente para q sea reenviada */</i>
+<pre>
+update notificacion_programada
+set enviada = false --,json = '{"idPivote":"2","claveEvento":"CONFIRMA_INSCRIPCION"}'
+where id_notificacion_programada >= 3990;
+</pre>
+</p>
+ 

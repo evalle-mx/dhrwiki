@@ -1,0 +1,252 @@
+<div ng-controller="installerCtrl">
+    <h1>Git</h1>
+
+        <p>
+            Git is software for tracking changes in any set of files, usually used for coordinating work among programmers collaboratively developing source code during software development. Its goals include speed, data integrity, and support for distributed, non-linear workflows
+        </p>
+    <hr>
+
+    <div class="row " >
+        <div class="col-xs-12" >
+            <p>
+                # Initialize the git tracking<br/>
+                <code>$ git init</code>
+            </p>
+
+            <p>
+                # Create .gitignore file with Terminal <br/>
+                <code>$ echo "### ignoring the following files and folders ###" > .gitignore | gedit .gitignore</code>
+            </p>
+
+            <p>
+                # Visualize project status (Changes + staged)
+            <br/>
+                        <code>$ git status</code>
+            </p>
+            <p>
+                # Move all changes to staging
+            <br/>
+                        <code>$ git add .</code>
+                        <code>$ git add &lt;fileName&gt;</code>
+            </p>
+            <p>
+                # Move specific file to staging
+            <br/>
+                        <code>$ git add NUnitTestTriangle.csproj </code>
+            </p>
+            <p>
+                # Confirm changes to branch With oneline message
+            <br/>
+                        <code>$ git commit -m "Chapter 2.04, Domain, Repository, Services"</code>
+            </p>
+            <p>
+                # confirm changes to branch and open editor for message
+            <br/>
+                        <code>$ git commit</code>
+            </p>
+            <p>
+                # Override last commit message
+            <br/>
+                        <code>$ git commit --amend -m "Initial commit, app v0. SNAPSHOT"</code>
+            </p>
+            <p>
+                # Override last commit and open editor for message
+            <br/>
+                        <code>$ git commit --amend</code>
+            </p>
+            <p>
+                # List all commits in descendent order
+            <br/>
+                        <code>$ git log</code>
+            </p>
+            <p>
+                # Set Gedit as default git message editor
+            <br/>
+                        <code>$ git config --global core.editor "gedit -s"
+            </code>
+            </p>
+
+        </div>
+    </div> <!-- //row -->
+    <h3>Branching </h3>
+    <div class="row " >
+        <div class="col-xs-12" >
+            <p>
+                #Rename branch from master to main <br/>
+                <code>$ git branch -M main </code>
+            </p>
+            <p>
+                # Differences between branches <br/>
+                <code>$ git diff --stat --color main..&lt;BRANCH_NAME&gt; </code>
+            </p>
+            <p>
+                # Create new branch<br/>
+                <code>$ git branch new_feature</code>
+            </p>
+            <p>
+                # Change branch (Move HEAD)<br/>
+                <code> $ git checkout new_feature </code>
+            </p>
+            <p>
+                # Create new branch and Move HEAD <br/>
+                        <code>$ git checkout -b netto_version</code>
+            </p>
+            <p>
+                # Delete branch <br/>
+                        <code>$ git branch -d new_feature </code>
+            </p>
+            <p>
+                # list remote branches <br/>
+                    <code>$ git branch -r</code>
+            </p>
+        </div>
+    </div>
+
+    <h3>Remote / Group </h3>
+    <div class="row " >
+        <div class="col-xs-12" >
+            <p>
+                # list all remote instances <br/>
+                <code>$ git remote</code><br/>
+                <code>$ git remote -v</code>
+            </p>
+            <p>
+                # Clone a remote project <br/>
+                <code>$ git clone https://github.com/useraccount/project_name.git</code>
+            </p>
+            <p>
+                # Load changes in remote branch <br/>
+                <code>$ git push</code> <br/>
+                <code>$ git push --set-upstream origin branchName</code>
+            </p>
+            
+            <p>
+                # return a previous version  <br/>
+                <code>$ git reset --hard c067ddd817133e50e912b5cd31964dbc315337af</code>
+            </p>
+            <p>
+                #Release Remote repository <br/>
+                <code>$ git remote rm &lt;remote_Rep&gt; </code>
+            </p>
+        </div>
+    </div>
+</div><!-- ng-controller -->
+
+
+ 
+<!--
+
+# Ver diferencias entre ramas 
+git diff --stat --color main..<BRANCH_NAME>
+
+# Diferencias entre archivo especifico entre ramas
+git diff master..<BRANCH_NAME> <FULL_PATH_FILENAME>
+
+#
+git diff --stat --color master..dothr_daemons
+git diff master..dothr_daemons pom.xml
+git diff master..dothr_daemons src/main/java/com/example/ec/ExplorecaliApplication.java
+
+Nota: Con comparador git configurado* usar difftool en lugar de diff
+
+
+# Regresar codigo y Head a version solicitada
+git reset --hard 737040fb43356c675d2d44a7f4d9355415f12a1c
+
+
+
+#Mostrar las ramas remotas
+$ git remote -v
+
+
+
+
+
+
+
+
+#Crear rama y cambiar Head a nueva rama (new_feature)
+git branch new_feature
+git checkout new_feature
+
+# Crear rama y cambiar Head un solo comando
+git checkout -b new_feature
+
+#Mostrar ramas
+git branch
+
+# Ver diferencias entre ramas
+$ git diff --stat --color main..evalle
+
+#Borrar una rama
+git branch -d new_feature
+
+
+######  Remoto/Colaborativo #####
+github: evalle-mx/Viol3t@2020/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
+
+
+git clone https://github.com/<GITHUB_ACCOUNT>/<PROJECT_NAME>.git
+
+git push --set-upstream origin evalle
+
+# Create a new repository () on the command line
+*new Repository en GitHub as Public (Without ReadMe & .gitignore)
+
+#Create Default ReadMe for Cloud
+echo "# SpringB-Notifier" >> README.md
+
+
+#Add and push remote repository (github)
+$ git remote add origin https://github.com/<NOMBRE_USUARIO>/<NOMBRE_PROYECTO>.git
+$ git push -u origin main
+
+#Show verbose remote repositories
+git remote -v
+
+#Release Remote repository
+git remote rm <remote_Rep>
+
+##  Connect and push to existing repository from the command line
+git remote add origin https://github.com/<NOMBRE_USUARIO>/<NOMBRE_PROYECTO>.git
+git branch -M main
+git push -u origin main    |    git push --set-upstream origin evalle  
+
+## Retrieve from GitHUB
+git pull
+git pull origin main
+
+
+
+#Quitar un folder de Tracking Git
+ git rm -r --cached serverManager/target/
+____________________________________________________________________________
+
+CONFIGURACIONES
+# set global username/email configuration:
+git config --global user.name "FIRST_NAME LAST_NAME"
+git config --global user.email "MY_NAME@example.com"
+
+#Check/edit global config
+$ gedit .gitconfig
+
+#set repository-specific username/email configuration
+cd <PROJECT_FOLDER>/
+git config user.name "FIRST_NAME LAST_NAME"
+git config user.email "MY_NAME@example.com"
+cat .git/config
+
+
+Para usar una herramienta de comparacion (como Meld en Linux), se puede configurar git: [https://stackoverflow.com/questions/34119866/setting-up-and-using-meld-as-your-git-difftool-and-mergetool]
+$ gedit .gitconfig
+
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+
+y usar difftool en lugar de diff
+
+-->

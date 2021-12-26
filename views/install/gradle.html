@@ -1,0 +1,90 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Gradle</h1>
+
+            <div class="alert alert-warning" role="alert">
+                Gradle requires Java <a href="#/instJava">JDK</a> or JRE version 7 or above to be installed.
+            </div>
+            
+            <p>
+                Download by <b>wget</b> the compatible distribution required by the project (V.3.x), preferably downloading the last stable distribution
+                from the <a href="https://services.gradle.org/distributions/" target="_blank"> Gradle Distributions</a> page.
+
+                <pre>
+$ wget https://services.gradle.org/distributions/gradle-5.0-bin.zip -P /tmp
+    or
+$ wget https://services.gradle.org/distributions/gradle-3.5.1-bin.zip -P /tmp</pre>
+
+            </p>
+            <p>
+                Unzip in the environment folder into <b>/opt/</b> inside a new (or existing) folder <b>gradle/</b>
+                <pre>$ sudo unzip -d /opt/gradle /tmp/gradle-*.zip
+                    
+$ ls /opt/gradle/gradle-</pre>
+
+                    Edit profile file to set Gradle resource (It also works to alternate versions)
+                    <pre>
+$ sudo gedit /etc/profile.d/gradle.sh</pre>
+                        Pasting the following code:
+                        <pre># export GRADLE_HOME=/opt/gradle/gradle-6.XX
+# DotHR Proyect compiler:
+export GRADLE_HOME=/opt/gradle/gradle-5.XX
+#export GRADLE_HOME=/opt/gradle/gradle-3.XX
+export PATH=${GRADLE_HOME}/bin:${PATH}
+                            </pre>
+
+                        Add executable permission to shell script and apply changes to account profile
+                    
+            <pre>$ sudo chmod +x /etc/profile.d/gradle.sh
+                    
+$ source /etc/profile.d/gradle.sh</pre>
+
+            </p>
+
+            
+            <h3 id="verify-gradle-installation">Verify the Gradle installation <a href="#verify-gradle-installation" class="headline-link" aria-hidden="true">#</a></h3>
+
+            <p>To validate that Gradle is installed properly use the <code>gradle -v</code> 
+                command which will display the Gradle version:
+            </p>
+            <pre class="terminal"><code class="terminal-line" prefix="$">gradle -v</code></pre>
+
+            <p>You should see something like the following:</p>
+
+            <pre><code class="language-output" data-lang="output">
+                Welcome to Gradle 5.0!
+
+                Here are the highlights of this release:
+                 - Kotlin DSL 1.0
+                 - Task timeouts
+                 - Dependency alignment aka BOM support
+                 - Interactive `gradle init`
+                
+                For more details see https://docs.gradle.org/5.0/release-notes.html
+                
+                
+                ------------------------------------------------------------
+                Gradle 5.0
+                ------------------------------------------------------------
+                
+                Build time:   2018-11-26 11:48:43 UTC
+                Revision:     7fc6e5abf2fc5fe0824aec8a0f5462664dbcd987
+                
+                Kotlin DSL:   1.0.4
+                Kotlin:       1.3.10
+                Groovy:       2.5.4
+                Ant:          Apache Ant(TM) version 1.9.13 compiled on July 10 2018
+                JVM:          1.8.0_181 (Oracle Corporation 25.181-b13)
+                OS:           Linux 4.15.0-36-generic amd64
+                </code></pre>
+
+            <p>
+                Reference: <a href="https://linuxize.com/post/how-to-install-gradle-on-ubuntu-18-04/" target="_blank">https://linuxize.com/post/how-to-install-gradle-on-ubuntu-18-04/</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Gradle"; </script>

@@ -1,0 +1,308 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Secure Redis</h1>
+
+            <h3>Installing prerequisites</h3>
+            
+            <p>
+                Update your local apt package cache and install the dependencies
+            </p>
+            <pre class="gen-command">$ sudo apt update
+$ sudo apt install build-essential tcl
+$ sudo apt install curl
+$ sudo apt-get install make</pre>
+
+            <h3>Downloading, Compiling, and Installing Redis</h3>
+            <p>
+                Move to $HOME/app folder, use curl to download the latest stable version of Redis. The latest version can always be found at a stable download:
+            </p>
+            <pre class="gen-command">$ curl -O http://download.redis.io/redis-stable.tar.gz
+$ tar xzvf redis-stable.tar.gz</pre>
+            <p>
+                Compile the Redis binaries, and run the test suite to make sure everything was built correctly
+            </p>
+            <pre class="gen-command">$ cd redis-stable
+$ make
+$ make test
+            </pre>
+            <p>Output should be like this:</p>
+            <pre>
+                ...
+                \o/ All tests passed without errors!
+        
+                Cleanup: may take some time... OK
+                make[1]: Leaving directory '/home/dothr/app/redis-stable/src'</pre>
+            <p>
+                This typically takes a few minutes to finish. Once the test completes, install the binaries onto the system :
+            </p>
+            <pre class="gen-command">$ sudo make install
+                
+                cd src && make install
+                make[1]: Entering directory '/home/dothr/app/redis-stable/src'
+        
+                Hint: It's a good idea to run 'make test' ;)
+        
+                    INSTALL install
+                    INSTALL install
+                    INSTALL install
+                    INSTALL install
+                    INSTALL install
+                make[1]: Leaving directory '/home/dothr/app/redis-stable/src'</pre>
+            <p>
+                That’s it for installing Redis, and now you’re ready to start configuring it. To this end, you’ll need to create a configuration directory. 
+                    The Redis configuration directory is conventionally located within the /etc/ directory, and you can create it there :
+            </p>
+            <pre class="gen-command">$ sudo mkdir -p /etc/redis</pre>
+            <p>
+                Next, copy over the sample Redis configuration file that came included with the Redis source archive:
+            </p>
+            <pre class="gen-command">$ sudo cp /home/dothr/app/redis-stable/redis.conf /etc/redis</pre>
+            <p>
+                Edit file /etc/redis/redis.conf to declare an init system to manage Redis as a service.The supervised directive
+                    is set to no by default. Since you are running Ubuntu, which uses the systemd init system, change this to systemd:
+            </p>
+            <pre class="gen-command">$ sudo gedit /etc/redis/redis.conf</pre>
+            <pre>
+                . . .
+        
+                # If you run Redis from upstart or systemd, Redis can interact with your
+                # supervision tree. Options:
+                #   supervised no      - no supervision interaction
+                #   supervised upstart - signal upstart by putting Redis into SIGSTOP mode
+                #   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
+                #   supervised auto    - detect upstart or systemd method based on
+                #                        UPSTART_JOB or NOTIFY_SOCKET environment variables
+                # Note: these supervision methods only signal "process is ready."
+                #       They do not enable continuous liveness pings back to your supervisor.
+                supervised systemd
+        
+                . . .</pre>
+            <p>
+                Next, find the dir directive. This option specifies the directory which Redis will use to dump persistent data. 
+                You need to change this to a location where Redis will have write permissions and which isn't viewable by normal users.<br>
+            
+                Use the /var/lib/redis directory for this; you will create this directory and adjust its permissions later in Step 4:
+            </p>
+            <pre > . . .
+                
+                # The working directory.
+                #
+                # The DB will be written inside this directory, with the filename specified
+                # above using the 'dbfilename' configuration directive.
+                #
+                # The Append Only File will also be created inside this directory.
+                #
+                # Note that you must specify a directory here, not a file name.
+                dir /var/lib/redis
+        
+                . . .</pre>
+            <p>
+                Save and close the file when you are finished
+            </p>
+
+
+            <h3>Creating a Redis systemd Unit File</h3>
+            <p>
+                Create and open the /etc/systemd/system/redis.service file to get started:
+            </p>
+            <pre class="gen-command">$ sudo gedit /etc/systemd/system/redis.service</pre>
+            <pre>
+                [Unit]
+                Description=Redis In-Memory Data Store
+                After=network.target
+        
+                [Service]
+                User=redis
+                Group=redis
+                ExecStart=/usr/local/bin/redis-server /etc/redis/redis.conf
+                ExecStop=/usr/local/bin/redis-cli shutdown
+                Restart=always
+        
+                [Install]
+                WantedBy=multi-user.target</pre>
+
+            <h3>Creating the Redis User, Group, and Directories</h3>
+            <p>
+                The last things you need to do before starting and testing Redis are to create the user, group, and directory that you referenced in the previous two files.
+                <br>
+                Begin by creating the redis user and group. You can do this in a single command :
+            </p>
+            <pre class="gen-command">$ sudo adduser --system --group --no-create-home redis</pre>
+            <p>
+                Next, create the /var/lib/redis directory (which is referenced in the redis.conf file you created in Step 2) :
+            </p>
+            <pre class="gen-command">$ sudo mkdir -p /var/lib/redis</pre>
+            <p>
+                Give the redis user and group ownership over this directory:
+            </p>
+            <pre class="gen-command">$ sudo chown redis:redis /var/lib/redis</pre>
+            <p>
+                Finally, adjust the permissions so that regular users cannot access this location:
+            </p>
+            <pre class="gen-command">$ sudo chmod 770 /var/lib/redis</pre>
+
+            <h3>Starting</h3>
+            <p>
+                Start the systemd service :
+            </p>
+            <pre class="gen-command">$ sudo systemctl start redis</pre>
+            <p>
+                Check that the service has no errors by running:
+            </p>
+            <pre class="gen-command">$ sudo systemctl status redis</pre>
+            <pre>
+                
+                            
+                ● redis.service - Redis In-Memory Data Store
+                   Loaded: loaded (/etc/systemd/system/redis.service; disabled; vendor preset: enabled)io
+                   Active: active (running) since Mon 2019-02-11 15:54:04 CST; 10s ago
+                 Main PID: 18031 (redis-server)
+                    Tasks: 4 (limit: 4915)
+                   CGroup: /system.slice/redis.service
+                       └─18031 /usr/local/bin/redis-server 127.0.0.1:6379
+        
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]:  |    `-._`-._        _.-'_.-'    |
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]:   `-._    `-._`-.__.-'_.-'    _.-'
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]:       `-._    `-.__.-'    _.-'
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]:           `-._        _.-'
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]:               `-.__.-'
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]: 18031:M 11 Feb 2019 15:54:04.521 # WARNING: The TCP backlog
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]: 18031:M 11 Feb 2019 15:54:04.521 # Server initialized
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]: 18031:M 11 Feb 2019 15:54:04.521 # WARNING overcommit_memor
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]: 18031:M 11 Feb 2019 15:54:04.521 # WARNING you have Transpa
+                feb 11 15:54:04 dothr-VivoBook-ASUSLaptop-X530UAO redis-server[18031]: 18031:M 11 Feb 2019 15:54:04.521 * Ready to accept connecti
+                lines 1-18/18 (END)</pre>
+            <p>
+                Maybe We had some warnings that needed to be addressed:
+            </p>
+            <pre>
+                1. WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+                2. WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis.
+                 To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your 
+                /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+            
+                 3. WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 
+                'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+            
+                Solutions:
+            
+                For WARNING1 and WARNING2:
+            
+                 create /etc/rc.local
+            
+                    dothr@dothr-asus:~$ sudo su
+                        [sudo] contraseña para dothr: 
+                    root@dothr-asus:/home/dothr# printf '%s\n' '#!/bin/bash' 'exit 0' | sudo tee -a /etc/rc.local
+                            #!/bin/bash
+                            exit 0
+            
+                    root@dothr-asus:/home/dothr# chmod +x /etc/rc.local
+                    root@dothr-asus:/home/dothr# vim /etc/rc.local
+                        #!/bin/bash
+                        sysctl -w net.core.somaxconn=600
+                        echo never > /sys/kernel/mm/transparent_hugepage/enabled
+                        exit 0
+            
+                    root@dothr-asus:/home/dothr#exit
+            
+            
+                For WARNING3:		
+                add linea 'vm.overcommit_memory = 1' to final of file
+                    $ sudo vim /etc/sysctl.conf
+                        ...
+                        vm.overcommit_memory = 1
+                    
+                    $ sudo sysctl vm.overcommit_memory=1</pre>
+
+            <p>
+                Restart the systemd service :
+            </p>
+            <pre class="gen-command">$ sudo systemctl restart redis</pre>
+            <p>
+                Check that the service has no errors by running:
+            </p>
+            <pre class="gen-command">$ sudo systemctl status redis</pre>
+
+
+            <h3>Testing Redis</h3>
+            <p>
+                To test that your service is functioning correctly, connect to the Redis server with the command-line client:
+            </p>
+            <pre class="gen-command">$ redis-cli</pre>
+            <p>
+                In the prompt that follows, test connectivity :
+            </p>
+            <pre class="gen-command">127.0.0.1:6379>ping</pre>
+            <p>
+                This will return the 
+                Output
+            </p>
+            <pre>PONG</pre>
+            <p>
+                Next, check that you can set keys :
+            </p>
+            <pre class="gen-command">127.0.0.1:6379>set test "It's working!"
+                    OK</pre>
+            <p>
+                Retrieve the test value, you should be able to retrieve the value you stored:
+            </p>
+            <pre class="gen-command">127.0.0.1:6379>get test
+                
+                "It's working!"</pre>
+            <p>
+                After confirming that you can fetch the value, exit the Redis prompt to get back to the shell:
+            </p>
+            <pre class="gen-command">127.0.0.1:6379>exit</pre>
+            <p>
+                As a final test, we will check whether Redis is able to persist data even after it’s been stopped or restarted. <br>
+                To do this, first restart the Redis instance:
+            </p>
+            <pre class="gen-command">$ sudo systemctl restart redis</pre>
+            <p>
+                Then connect with the client again and confirm that your test value is still available:
+            </p>
+            <pre class="gen-command">$ redis-cli
+                127.0.0.1:6379>get test</pre>
+            <p>
+                The value of your key should still be accessible:
+            </p>
+            <pre>"It's working!"</pre>
+            <p>
+                Exit out into the shell again when you are finished, <code>127.0.0.1:6379>exit </code>
+            </p>
+            
+
+
+            <h3>Redis as Start Up Service</h3>
+            <p>
+                Assuming all of these tests worked and that you would like to start Redis automatically when your server boots, 
+                    enable the systemd service:
+            </p>
+            <pre class="gen-command">$ sudo systemctl enable redis
+                Output
+                Created symlink from /etc/systemd/system/multi-user.target.wants/redis.service to /etc/systemd/system/redis.service.
+            </pre>
+
+            <h4 style="color: red;"> Commands</h4>
+            <table class="table table-hover">
+                <tr><td> <b>$ sudo systemctl start redis</b></td> <td>Start the systemd service</td></tr>
+                <tr><td> <b>$ sudo systemctl stop redis</b></td> <td>Stop systemd service</td></tr>
+                <tr><td> <b>$ sudo systemctl status redis</b></td> <td>Verify correct function</td></tr>
+                <tr><td> <b>$ sudo systemctl restart redis</b></td> <td>Restarts the service</td></tr>
+            </table>
+            <hr>
+            <p>Reference: <br>
+                <a href="https://www.digitalocean.com/community/tutorials/how-to-install-redis-from-source-on-ubuntu-18-04" target="_blank"> https://www.digitalocean.com/community/tutorials/how-to-install-redis-from-source-on-ubuntu-18-04</a><br>
+                <a href="https://www.tecmint.com/install-redis-server-in-centos-ubuntu-debian/" target="_blank"> https://www.tecmint.com/install-redis-server-in-centos-ubuntu-debian/</a><br>
+                <a href="http://grainier.net/how-to-uninstall-redis-server-from-ubuntu/" target="_blank"> http://grainier.net/how-to-uninstall-redis-server-from-ubuntu/</a><br>
+                <a href="https://www.techandme.se/performance-tips-for-redis-cache-server/" target="_blank"> https://www.techandme.se/performance-tips-for-redis-cache-server/</a><br>
+                <a href="https://linuxize.com/post/how-to-install-and-configure-redis-on-ubuntu-18-04/" target="_blank"> https://linuxize.com/post/how-to-install-and-configure-redis-on-ubuntu-18-04/</a><br>
+
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Secure Redis"; </script>

@@ -1,0 +1,198 @@
+<br>
+<p>
+    <i ng-click="vpre1=!vpre1" class="sql-comment"> Listar personas en sistema (TABLA PERSONA SOLO)</i>
+    <i ng-click="vpre1=!vpre1" class="glyphicon glyphicon-chevron-down" ng-show="!vpre1"></i> 
+    <i ng-click="vpre1=!vpre1" class="glyphicon glyphicon-chevron-up" ng-show="vpre1"></i>
+    <pre ng-show="vpre1">
+    SELECT id_persona, email, id_estatus_inscripcion as idEstatus, concat(nombre, ' ', apellido_paterno, ' ', apellido_materno) as fullname
+    , titulo_max, ultimo_puesto, id_sector_economico
+    , fecha_creacion, fecha_modificacion, token_inicio
+    --, numero_confirmar_inscripcion, numero_debe_publicar
+    from persona
+    where id_persona is not null
+    -- and fecha_modificacion >= '2019-07-22 00:00:00' 
+    -- and email like '%@%'
+    -- and id_estatus_inscripcion = 3
+    -- and id_sector_economico is not null
+    -- and id_persona between 45 and 184
+    -- and id_persona > 2625   /* 2625	"planta.ing.felipe@dhrtest.net"	2	"FELIPE DE JESUS RODRIGUEZ ARIAS"*/
+    order by id_persona desc;
+    </pre>
+</p>
+
+
+<!-- -->
+<p>
+    <i ng-click="vpre2=!vpre2" class="sql-comment">  Listar personas en sistema con detalle de rol </i>
+    <i ng-click="vpre2=!vpre2" class="glyphicon glyphicon-chevron-down" ng-show="!vpre2"></i> 
+    <i ng-click="vpre2=!vpre2" class="glyphicon glyphicon-chevron-up" ng-show="vpre2"></i>
+    <pre ng-show="vpre2">SELECT per.id_persona, per.email, per.id_estatus_inscripcion as idEstatus, concat(per.nombre, ' ', per.apellido_paterno, ' ', per.apellido_materno) as nombreCompleto
+, remp.id_rol, rol.descripcion, per.fecha_creacion as fCreacion, per.fecha_modificacion as fModificacion, per.token_inicio
+from persona as per
+inner join relacion_empresa_persona remp on per.id_persona=remp.id_persona 
+inner join rol rol on rol.id_rol=remp.id_rol
+where per.id_persona is not null
+--and per.fecha_modificacion >= '2019-07-22 00:00:00' 
+--and per.email like '%@%'
+--and per.id_estatus_inscripcion = 3
+--and per.id_persona > 1354
+order by per.id_persona desc;</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Verificar correos duplicados */</i>
+<pre>
+SELECT email, COUNT(id_persona)
+FROM persona
+GROUP BY email
+HAVING COUNT(id_persona) > 1;</pre>
+</p>
+
+<p>
+<i class="sql-comment">/* persona y contraseña encriptada */</i>
+<pre>
+select p.id_persona, p.email, p.nombre, p.token_inicio, hp.password
+from persona p, historico_password hp
+where p.id_persona = hp.id_persona
+order by p.id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Cambiar rol de persona */</i>
+    <pre>
+update relacion_empresa_persona 
+set id_rol = 4 /* 1;"Administrador del Sistema"; 2;"Administrador Operativo"; 3;"Candidato";  4;"Contratante"; 5;"Consultor" */
+where id_persona = 3;
+-- and id_empresa = 1;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* contenido tabla area_persona */</i>
+    <pre>
+select id_persona, id_area, confirmada
+from area_persona
+order by id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* contenido tabla area_persona con tablas relacionadas */</i>
+    <pre>
+select ap.id_persona, concat(per.nombre, ' ', per.apellido_paterno, ' ', per.apellido_materno) as fullname, ap.id_area, ap.principal, ap.confirmada, ar.descripcion, ap.personal
+from area_persona as ap
+inner join area ar on ar.id_area = ap.id_area
+inner join persona per on per.id_persona = ap.id_persona
+where ap.id_persona is not null
+--and ap.id_persona in (44,45, 165)
+and (ap.id_persona > 9 and ap.id_persona < 185)
+order by ap.id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Contar area asignadas a persona */</i>
+    <pre>
+SELECT id_persona, COUNT(id_area)
+FROM area_persona
+GROUP BY id_persona
+order by id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Buscar personas clasificadas en solr con su area asignada */</i>
+    <pre>
+select p.id_persona, p.email, p.nombre, p.apellido_paterno, p.id_estatus_inscripcion, p.clasificado, ap.id_area, ap.principal
+from persona p, area_persona ap
+where ap.id_persona is not null
+and p.id_persona = ap.id_persona
+and ap.id_area in (9)
+--and ap.principal = false
+and p.id_estatus_inscripcion =2
+order by p.id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* BUSCAR PERSONAS CLASIFICADAS POR AREA */</i>
+    <pre>
+select PER.id_persona, PER.email, PER.nombre, PER.apellido_paterno, PER.id_estatus_inscripcion, PER.clasificado, ARP.id_area, AR.descripcion, ARP.principal
+from persona PER
+inner join area_persona as ARP on ARP.id_persona = PER.id_persona
+inner join area as AR on AR.id_area = ARP.id_area
+and ARP.id_area in (1)
+order by PER.id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/*  Listar contenido por idPersona () */</i>
+    <pre>
+select CONT.id_contenido, CONT.id_persona, PER.email, CONT.id_tipo_contenido_archivo, CONT.descripcion,
+--CONT.id_tracking_monitor, CONT.id_tracking_postulante,
+TCA.id_tipo_contenido, 
+TC.descripcion,
+TCA.id_tipo_archivo,
+TA.descripcion, TA.extension
+from contenido as CONT
+inner join persona PER on CONT.id_persona = PER.id_persona
+inner join tipo_contenido_archivo TCA on TCA.id_tipo_contenido_archivo = CONT.id_tipo_contenido_archivo
+inner join tipo_contenido TC on TCA.id_tipo_contenido=TC.id_tipo_contenido
+inner join tipo_archivo TA on TA.id_tipo_archivo=TCA.id_tipo_archivo
+where CONT.contenido is not null
+--and CONT.id_persona = 2
+--id_tracking_monitor = X
+--id_tracking_postulante = X
+--and TCA.id_tipo_contenido !=1
+order by PER.id_persona;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Muestra relacion de tipos de archivo por contenidos */</i>
+    <pre>
+Select *
+from tipo_contenido_archivo as TCA
+inner join tipo_archivo TA on TCA.id_tipo_archivo = TA.id_tipo_archivo
+where id_tipo_contenido =3;
+</pre>
+</p>
+
+<p>
+<i class="sql-comment">/* ordenar las escolaridades cronologicamente */</i>
+<pre>
+select *
+from escolaridad
+where id_persona = 5
+order by anio_inicio desc;
+</pre>
+</p>
+
+<p>
+    <i class="sql-comment">/* Buscar personas clasificadas en solr */</i>
+<pre>
+select id_persona, email, id_texto_clasificacion, clasificado from persona
+where id_texto_clasificacion is not null
+order by id_persona;
+</pre>
+</p>
+
+<hr>
+<p>
+    <i class="code-danger">/* ELIMINAR/BORRAR persona (solo inscrito) */</i>
+<pre>
+Delete from notificacion
+where id_persona_receptor = ??;
+
+Delete from relacion_empresa_persona
+where id_persona = ??;
+
+Delete from historico_password
+where id_persona = ??;
+
+Delete from persona
+where id_persona = ??;
+</pre>
+</p>

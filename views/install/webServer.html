@@ -1,0 +1,180 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Apache web server</h1>
+
+            <h3>Install the apache2 package:</h3>
+            <p>
+                <div class="terminal-back">
+                    <span class="terminal-command">$ sudo apt install apache2 </span>
+                </div>
+            </p>
+
+            <h3>Check with the systemd init system to make sure the service is running by typing</h3>
+            <p>
+                <div class="terminal-back">
+                     <span class="terminal-command">$ sudo systemctl status apache2 </span>
+                     <br>
+                     <span class="terminal-trace">
+                     ● apache2.service - The Apache HTTP Server<br>
+                     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)<br>
+                    Drop-In: /lib/systemd/system/apache2.service.d<br>
+                         └─apache2-systemd.conf<br>
+                     Active: active (running) since Wed 2019-01-30 15:21:06 CST; 29s ago<br>
+                   Main PID: 11733 (apache2)<br>
+                      Tasks: 55 (limit: 4915)<br>
+                     CGroup: /system.slice/apache2.service<br>
+                         ├─11733 /usr/sbin/apache2 -k start<br>
+                         ├─11736 /usr/sbin/apache2 -k start<br>
+                         └─11737 /usr/sbin/apache2 -k start<br>
+
+                    </span>
+                </div>
+            </p>
+
+            <h3>Add ServerName localhost as the last line in <b> /etc/apache2/apache2.conf</b> file.</h3>
+            <p>
+                <div class="terminal-back">
+                    <span class="terminal-command">$ sudo gedit /etc/apache2/apache2.conf </span>
+                </div>
+                <br>
+                <pre>ServerName localhost</pre>
+                <div class="terminal-back">
+                    <span class="terminal-command"> $ sudo systemctl restart apache2 </span>
+                </div>
+                <br>
+            </p>
+
+            <h3>Open server on the browser, it will display the apache2 test page.</h3>
+            <p>
+                (Apache default document root is located in <b>/var/www/</b> )
+                <a href="http://localhost" target="_blank">http://localhost</a> or 
+                <a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>
+                <br>
+                <div class="panel panel-default ">
+                    <div class="panel-body text-center">
+                        <img src="resource/img/install/apache-home1.jpg" class="img-responsive image-tuto-small" />
+                    </div>
+                </div>
+                
+            </p>
+            <hr>
+
+            <h3>Managing the Apache Process </h3>
+            <p>
+
+                <table class="table-hover">
+                    <caption>Basic management Commands</caption>
+                    <tr><td class="gen-command">$ sudo systemctl start apache2</td><td>Start server</td></tr>
+                    <tr><td class="gen-command">$ sudo systemctl stop apache2</td><td>Stop server</td></tr>
+                    <tr><td class="gen-command">$ sudo systemctl restart apache2 </td><td>Restart server (To stop and then start the service again)</td></tr>
+                    <tr><td class="gen-command">$ sudo systemctl reload apache2</td><td>Reload Changes (making configuration changes, reload without dropping connections)</td></tr>
+                    <tr><td class="gen-command">$ sudo systemctl disable apache2</td><td>Disable automatically start at Boot (service)</td></tr>
+                    <tr><td class="gen-command">$ sudo systemctl enable apache2</td><td>Enable service to start up at boot automatically</td></tr>
+
+
+                </table>
+            </p>
+
+            <h3>Setting Up Virtual HostsManaging the Apache Process </h3>
+            <p>
+                <b>Change Default server host folder</b> <br>
+                By default, the Apache Server operates in <b>/var/www/</b>, for our business, we need to change this to a designed path:
+            </p>
+
+            <p>
+                As administrator user, and create a new folder called webServer into /home/<b>&lt;user&gt;</b>/app :
+                <pre class="gen-command">$ mkdir $HOME/app
+$ mkdir $HOME/app/webServer </pre>
+            </p>
+
+            <p>
+                Copy the <b>/var/www/*index.html*</b> into new folder (This file is going to be our test page), and change the permissions
+                <pre class="gen-command">$ cp /var/www/html/index.html /home/<b>&lt;user&gt;</b>/app/webServer/
+$ cd $HOME/app/webServer
+$ chmod 666 index.html</pre>
+            </p>
+
+            <p>
+                Edit the copied file (index.html) to be sure is our test page:
+
+                <pre class="gen-command"> $ vim index.html</pre>
+                <pre>   &lt;html&gt;
+    &lt;title&gt;Index.html in app/webServer&lt;/title&gt;
+    &lt;body&gt;
+    &lt;h1&gt;It Works!&lt;/h1&gt;
+    &lt;p&gt;New Default page for Apache Web Server.&lt;/p&gt;
+    &lt;h3&gt; this will be our landing page for Apache Web Server&lt;/h3&gt;
+    &lt;/body&gt;
+  &lt;/html&gt;</pre>
+    
+            </p>
+
+
+            <p>
+                Create new host configuration in <b>/etc/apache2/sites-available/ dothr.conf</b> (dothr is our host fileName):
+                <pre class="gen-command"> $ sudo gedit /etc/apache2/sites-available/dothr.conf</pre>
+                <pre>
+    &lt;VirtualHost *:80&gt;
+        DocumentRoot /home/<b>&lt;user&gt;</b>/app/webServer
+        &lt;Directory /home/<b>&lt;user&gt;</b>/app/webServer/&gt;
+            Options Indexes FollowSymLinks MultiViews
+            AllowOverride None
+            Order deny,allow
+            Allow from all
+            Require all granted
+        &lt;/Directory&gt;    
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    &lt;/VirtualHost&gt;</pre>
+                
+            </p>
+
+            <p>
+                Disable the default site defined in <b>000-default.conf</b>:
+                <pre class="gen-command"> $ sudo a2dissite 000-default.conf</pre>
+            </p>
+            <p>
+                Enable the file with the a2ensite tool:
+                <pre class="gen-command"> $ sudo a2ensite dothr.conf</pre>
+            </p>
+
+            <p>
+                Test for configuration errors:
+                <pre class="gen-command"> $ sudo apache2ctl configtest</pre>
+                If everything is correct: <b>Syntax OK</b>
+            </p>
+            <p>
+                Restart Apache to implement changes:
+                <pre class="gen-command"> $ sudo systemctl restart apache2</pre>
+            </p>
+
+            <p>
+                Open a new browser on <a href="http://localhost" target="_blank">http://localhost</a> or 
+                <a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>
+                <br>
+                <small><b>Once done, it is possible to copy/paste dothr webServer fileSystem pre-deployed.</b></small>
+                
+            </p>
+
+
+
+            <hr>
+            <div class="alert alert-success" role="alert">
+                <code>$ hostname -I</code> This option is used to get the IP(network) addresses. This option works only if the hostname is resolvable.
+            </div>
+
+              
+            <hr>
+            <h5>References</h5>
+            <a href="https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-18-04" target="_blank">
+                https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-18-04</a>
+
+        </div>
+
+    </div>
+    <script>
+        document.title = "Install Apache Web Server"
+    </script>
+</div>

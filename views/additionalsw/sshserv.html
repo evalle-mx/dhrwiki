@@ -1,0 +1,104 @@
+
+
+<div ng-controller="installerCtrl">
+    <div class="row " >
+       <div class="col-xs-12" >
+          <h1>SSH</h1>
+
+          <div class="markdown">
+            <p>The Secure Shell (SSH) is a network protocol used for a secure connection between a client and a server. 
+                 Each interaction between the server and a client is encrypted.</p>
+            <p>Enabling SSH will allow you to connect to your system remotely and perform administrative tasks. 
+                 You’ll also be able to securely transfer files via <code>scp</code> and <code>sftp</code>.
+            </p>
+            
+            <h2 id="enabling-ssh-on-ubuntu">Enabling SSH on Ubuntu <a href="#enabling-ssh-on-ubuntu" >#</a></h2>
+            <p>
+                By default, when Ubuntu is first installed, remote access via SSH is not allowed. Enabling SSH on Ubuntu is fairly straightforward.</p>
+            <p>
+                Perform the following steps as root or user with sudo privileges to install and enable SSH
+            </p>
+            <p>Open the terminal with <code>Ctrl+Alt+T</code> and install the <code>openssh-server</code> package:</p>
+            <pre class="terminal"><code class="gen-command" prefix="$">sudo apt update</code>
+<code class="gen-command terminal-line" prefix="$">sudo apt install openssh-server</code></pre>
+            <p>When prompted, enter your password and press Enter to continue with the installation.</p>
+            <figure>
+                <picture>
+                       <img alt="ubuntu install ssh" class="img-responsive image-tuto-med" src="resource/img/install/ubuntu-install-ssh1.jpg" loading="lazy" />
+                </picture>                        
+           </figure>
+
+           <p>Once the installation is complete, the SSH service will start automatically. You can verify that SSH is running by typing:</p>
+            <pre class="terminal"><code class="gen-command terminal-line" prefix="$">sudo systemctl status ssh</code></pre>
+            <p>The output should tell you that the service is running and enabled to start on system boot:</p>
+            <pre><code class="language-output">● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2020-06-01 12:34:00 CEST; 9h ago
+ ...</code></pre>
+            <figure>
+                <picture>
+                    <img alt="Running ssh" class="img-responsive image-tuto-med" src="resource/img/install/ubuntu-install-ssh2.jpg" loading="lazy" />
+                </picture>                        
+            </figure>
+            <p>Press <code>q</code> to get back to the command line prompt.</p>
+
+            <p>As well SSH service installation folder could be obtained by <code>which</code> command</p>
+            <pre class="terminal"><code class="gen-command">$ which ssh</code><br>/usr/bin/ssh<br><code class="gen-command">$ which sshd</code><br>/usr/bin/sshd</pre>
+
+            <p>Ubuntu ships with a firewall configuration tool called UFW. If the firewall is enabled on the system, make sure to open the SSH port:</p>
+            <pre class="terminal"><code class="gen-command terminal-line" prefix="$">sudo ufw allow ssh</code></pre>
+
+            <p>That’s it! You can now connect to your Ubuntu system via SSH from any remote machine. 
+                Linux and macOS systems have SSH clients installed by default. 
+                To connect from a Windows machine, use an SSH client such as 
+                <a href="https://www.putty.org/" rel="noopener" target="_blank">PuTTY</a>.</p>
+       
+             
+             <h2 id="connecting-to-the-ssh-server">Connecting to the SSH Server <a href="#connecting-to-the-ssh-server" class="headline-link" aria-hidden="true">#</a></h2>
+             <p>
+                To connect to your Ubuntu machine over LAN invoke the ssh command followed by the username and the IP address in the following format:
+             </p>
+             <pre class="terminal"><code class="gen-command terminal-line" prefix="$">ssh username@ip_address</code></pre>
+
+             <p> <b>*<small> IP address you can easily find it using the ip command: <code>$ ip a</code></small></b></p>
+             <p>Once found the IP address, log in to remote machine by running the ssh command, As is connecting  for the first time, a confirmation message comes out " Are you sure you want to continue connecting (yes/no)?"</p>
+             <p>Type yes and you’ll be prompted to enter your password, then the ip will be add the Host to the list of known hosts:</p>
+            <figure>
+                <picture>
+                    <img alt="Running ssh" class="img-responsive image-tuto-med" src="resource/img/install/ubuntu-install-ssh3.jpg" loading="lazy" />
+                </picture>                        
+            </figure>
+            <p> Do the same procedure for localhost and any other remote host. </p>
+
+            <h4>Key generation</h4>
+            <p> For channel Encryption is required to generate ssh Key</p>
+
+            <pre class="terminal"><code class="gen-command terminal-line" prefix="$">ssh-keygen -t rsa -P ""</code></pre>
+
+            <figure>
+                <picture>
+                    <img alt="Running ssh" class="img-responsive image-tuto-med" src="resource/img/install/ubuntu-install-ssh4.jpg" loading="lazy" />
+                </picture>                        
+            </figure>
+            
+            
+            <h2 id="disabling-ssh-on-ubuntu">Disabling SSH on Ubuntu <a href="#disabling-ssh-on-ubuntu" class="headline-link" aria-hidden="true">#</a></h2>
+            <p>
+                To disable the SSH server on your Ubuntu system, simply stop the SSH service by running:
+             </p>
+             <pre class="terminal"><code class="terminal-line" prefix="$">sudo systemctl disable --now ssh</code></pre>
+             <p>Later, to re-enable it, type:</p>
+             <pre class="terminal"><code class="terminal-line" prefix="$">sudo systemctl enable --now ssh</code></pre>
+             
+          </div>
+          <!-- _________________________________________________ -->
+          <hr>
+          <p>Reference: <br>
+             <a href="https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/" target="_blank"> How to Enable SSH on Ubuntu 20.04 </a>
+          </p>
+       </div>
+    </div>
+ </div>
+ <script>document.title = "Enable SSH"; </script>
+ 
+ 

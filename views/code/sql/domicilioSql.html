@@ -1,0 +1,88 @@
+<!-- <p>
+    <i class="sql-comment">/* XXXXX */</i>
+    <pre>
+yyyyyyyy
+</pre>
+</p>  -->
+
+
+<p>
+    <i class="sql-comment">/* VERIFICAR domicilios duplicados  */</i>
+<pre>
+SELECT id_persona, COUNT(id_persona)
+FROM domicilio
+GROUP BY id_persona
+HAVING COUNT(id_persona) > 1;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/*  OBTIENE DATOS de domicilio duplicados */</i>
+<pre>
+select id_domicilio, id_persona, id_asentamiento, calle, google_latitude, google_longitude
+from domicilio 
+--where id_persona = 265
+where id_persona in (SELECT id_persona FROM domicilio GROUP BY id_persona HAVING COUNT(id_persona) > 1)
+order by fecha_creacion
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* buscar Datos requeridos para Settlement por Codigo Postal */</i>
+<pre>
+select SETL.codigo_postal, SETL.id_asentamiento, SETL.descripcion, 
+SETL.id_municipio, MUN.nombre as _municipio, 
+SETL.id_ciudad, CITY.nombre as _ciudad, 
+STAT.id_estado, STAT.nombre as _estado
+from Asentamiento as SETL
+inner join municipio MUN on SETL.id_municipio = MUN.id_municipio
+--inner join ciudad CITY on SETL.id_ciudad = CITY.id_ciudad
+left join ciudad CITY on SETL.id_ciudad = CITY.id_ciudad
+inner join estado STAT on MUN.id_estado = STAT.id_estado
+where SETL.codigo_postal = '50160'; /*14210 | 50160 */
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* Contar asentamientos con más de un municipio relacionado */</i>
+<pre>
+SELECT id_asentamiento, count(id_municipio)
+from Asentamiento
+group by id_asentamiento
+HAVING COUNT(id_municipio) > 1;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* para obtener datos aunque no haya relacion municipo-estado */</i>
+<pre>
+select SETL.id_asentamiento, SETL.descripcion,
+SETL.id_municipio, MUN.nombre as _municipio
+, SETL.id_ciudad, CITY.nombre as _ciudad, STAT.id_estado, STAT.nombre as _estado
+from Asentamiento as SETL
+left join municipio MUN on SETL.id_municipio = MUN.id_municipio
+left join ciudad CITY on SETL.id_ciudad = CITY.id_ciudad
+inner join estado STAT on MUN.id_estado = STAT.id_estado
+where SETL.codigo_postal = '14210';
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/*Busqueda con acentos normalizados*/</i>
+<pre>select *
+from municipio
+where id_estado = 9
+and TRANSLATE( lower(nombre),'ÁÉÍÓÚáéíóú','AEIOUaeiou' ) ilike translate('%obregó%','áéíóú','aeiou')
+--and nombre like '%Obregó%'
+--id_municipio = 718;
+</pre>
+</p> 
+
+<p>
+    <i class="sql-comment">/* Asentamiento con municipio y nombre similar */</i>
+<pre>select *
+from asentamiento
+where id_municipio = 274
+and descripcion like '%Tarang%';
+</pre>
+</p> 

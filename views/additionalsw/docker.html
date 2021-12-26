@@ -1,0 +1,97 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Docker</h1>
+            
+            <h3>Set Up the Repository</h3>
+            <p>
+                Search for Docker linux install to find <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">https://docs.docker.com/engine/install/ubuntu/</a>.
+            </p>
+            <pre class="gen-command">$ sudo apt-get update</pre>
+            <p>
+                Next, add all the packages to allow apt to use a repository over HTTPS
+            </p>
+            <pre class="gen-command">$ sudo apt-get install \
+apt-transport-https \
+ca-certificates \
+curl \
+gnupg-agent \
+software-properties-common</pre>
+
+
+            <p>
+                Add Docker’s official GPG key:
+            </p>
+            <pre class="gen-command">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</pre>
+
+            <p>
+                Use the x86_64 / amd64 command to set up the stable repository
+            </p>
+            <pre class="gen-command">$ sudo add-apt-repository \
+"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) \
+stable"</pre>
+
+            <h3>Install Docker Engine</h3>
+            <p>Update the apt package index, and install the latest version of Docker Engine and containerd, or go to the next step to install a specific version:</p>
+            <pre class="gen-command">$ sudo apt-get update
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io</pre>
+
+            <p>Execute docker version to test if is successfully installed</p>
+            <pre class="gen-command">$ sudo docker version</pre>
+            <div class="panel panel-default ">
+                <div class="panel-body text-center">
+                    <img src="resource/img/install/docker_installed.jpeg" class="img-responsive image-tuto-med" />
+                </div>
+            </div>
+
+            <hr>
+            <p>To use Docker without add sudo at begining, it is required to create docker group and add our user</p>
+            <pre class="gen-command"><span class="comentario"> //Create the docker group.</span>
+$ sudo groupadd docker
+<span class="comentario"> //Add your user to the docker group.</span>
+$ sudo usermod -aG docker $USER</pre>
+            <p>
+                More options in the <a href="https://docs.docker.com/engine/install/linux-postinstall/" target="_blank">Post-installation steps for Linux</a> section are:
+                <ul>
+                    <li>Configure Docker to start on boot</li>
+                    <li>Configuring remote access with systemd unit file</li>
+                    <li>Other configurations and problem solving</li>
+                </ul>
+                
+                
+            </p>
+
+            <hr>
+            <h3> Install Docker Compose</h3>
+            <p>
+                On Linux, you can download the Docker Compose binary from the Compose repository release page on GitHub. Follow the instructions from the link, which involve running the curl command in your terminal to download the binaries. These step-by-step instructions are also included below.
+            </p>
+
+            <p>
+                Run this command to download the current stable release of Docker Compose: </p>
+            <pre class="gen-command">$ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose </pre>
+
+            <p>
+            Apply executable permissions to the binary</p>
+            <pre class="gen-command">$  sudo chmod +x /usr/local/bin/docker-compose </pre>
+
+            <p>Test the installation.</p>
+            <pre class="gen-command">$  docker-compose --version</pre>
+
+
+
+            <!-- _________________________________________________ -->
+            <hr>
+            <p>Reference: <br>
+                <a href="https://www.youtube.com/watch?v=NVvZNmfqg6M" target="_blank"> Docker, Curso Práctico para principiantes (desde Linux) </a>
+                <br/>
+                <a href="https://docs.docker.com/compose/install/" target="_blank">Install Docker Compose</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Docker"; </script>
+ 

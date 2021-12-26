@@ -1,0 +1,71 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Java JDK</h1>
+
+            <p>
+                <h4>Following Online Tutorial</h4>
+
+                <a href="https://petewan.com/blog-post/install-and-manage-multiple-java-jdk-and-jre-versions-on-ubuntu-20-04/" target="_blank">
+                    Install and manage multiple Java JDK and JRE versions on Ubuntu 20.04
+                </a>
+
+            </p>
+            <hr>
+            
+            <p>
+
+                <pre>#Instalacion por PPA
+
+                    1.Add the JAVA JDK PPA using the add-apt-repository comamnd.
+                       $ sudo add-apt-repository -y ppa:webupd8team/java
+                       $ sudo apt-get update
+                   
+                    2. Now, install Java JDK using the apt-get command.
+                    During the installation, you would need to accept the Oracle binary licenses.
+                       $ sudo apt install -y oracle-java8-installer
+                   
+                   contestar ok y despues yes
+                   
+                    3. revisar si se instalo
+                      $ java -version
+                   
+                       dothr@dothr-asus:~$ java -version
+                       java version "1.8.0_201"
+                       Java(TM) SE Runtime Environment (build 1.8.0_201-b09)
+                       Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)</pre>
+            </p>
+
+            <p>
+                To switch between different JDK Environments:
+                <pre class="gen-command">$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac </pre>
+
+                <div class="alert alert-warning" role="alert">
+                    Both <b>java</b> and <b>javac</b> must point the same distribution
+                </div>
+                <pre class="gen-command">$ java -version
+$ javac -version</pre>
+            </p>
+
+            <p>
+                Also change and apply to environment $JAVA_HOME 
+            </p>
+            <pre class="gen-command">$ sudo gedit /etc/environment
+$ source /etc/environment
+$ echo $JAVA_HOME
+            </pre>
+
+            <p>
+                <hr>
+                Referencias: 
+                <a href="https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-oracle-java-jdk-10-8-on-ubuntu-18-04-ubuntu-17-10.html" target="_blank"> https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-oracle-java-jdk-10-8-on-ubuntu-18-04-ubuntu-17-10.html /</a>
+                <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank"> https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html /</a>
+
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Java JDK"; </script>

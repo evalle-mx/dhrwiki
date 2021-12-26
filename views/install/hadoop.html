@@ -1,0 +1,279 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Hadoop 1.2.1</h1>
+
+            <h2>Hadoop User and Group</h2>
+            <p>Create user and group for hadoop installation, enter standard password "tc34dm1n" for hadoop user</p>
+            <pre class="gen-command">
+    <span class="comentario">#adding group</span>
+    $ sudo addgroup hadoop 
+          
+    <span class="comentario"># Create user & group for hadoop, standard password "tc34dm1n" </span>
+    $ sudo adduser --ingroup hadoop hduser
+          
+    $ sudo usermod -a -G dothr hduser
+    $ sudo usermod -a -G hadoop dothr</pre>
+    
+            <h2>Configure SSH</h2>
+            <p>
+              Check if <a href="#/instSsh">SSH</a> is installed using <code>$ sudo systemctl status ssh</code>. If not <a href="#/instSsh">install</a> it.
+            </p>
+
+            <p>Next, create Key for hadoop user, press enter when prompt ask for location and passphrase to save: </p>
+            <pre>
+  <code class="gen-command">$ su hduser</code>
+  <code class="gen-command">$ ssh-keygen -t rsa -P ""</code>
+  Generating public/private rsa key pair.
+  Enter file in which to save the key (/home/hduser/.ssh/id_rsa): 
+		Created directory '/home/hduser/.ssh'.
+		Your identification has been saved in /home/hduser/.ssh/id_rsa.
+		Your public key has been saved in /home/hduser/.ssh/id_rsa.pub.
+		The key fingerprint is:
+		SHA256:quiGFj54n7kEMw1dNXEO61jssic7TJ1UWgP5Fd1o48Q hduser@dothr-asus
+		The key's randomart image is:
+		+---[RSA 2048]----+
+		|      ..*+. .+ o |
+		|   . . ..*+ . E .|
+		|  . .   +=.o + . |
+		|   o   =o .   .  |
+		|  + . ooS.       |
+		| . +  .+o        |
+		|o.. .o+ .        |
+		|o+oo +o+         |
+		|.++.*...         |
+    +----[SHA256]-----+</pre>
+            <p>
+              Add the newly created keys to the list of authorized keys
+            </p>
+            <pre class="gen-command">$ cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys</pre>
+            <p>Check SSH </p>
+            <pre>
+              <code class="gen-command">$ ssh localhost</code>
+              Welcome to Ubuntu ??.?? LTS (GNU/Linux 4.15.0-43-generic x86_64)
+                
+		 * Documentation:  https://help.ubuntu.com
+		 * Management:     https://landscape.canonical.com
+		 * Support:        https://ubuntu.com/advantage
+                
+                
+		 * Canonical Livepatch is available for installation.
+		   - Reduce system reboots and improve kernel security. Activate at:
+		     https://ubuntu.com/livepatch
+                
+              </pre>
+
+              <h2>Install Hadoop</h2>
+              <p></p>
+              <pre>#download using wget 
+$ su dothr
+$ cd $HOME/app
+$ wget $ wget http://apache.mirror.gtcomm.net/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+$ tar xvzf hadoop-1.2.1.tar.gz
+            
+Move the hadoop to the /usr/local/hadoop directory and change the owner of that directory.
+            
+#move the directory
+$ sudo mv hadoop-1.2.1 /usr/local/hadoop
+            
+#change the owner to hduser
+$ sudo chown -R hduser:hadoop /usr/local/hadoop</pre>
+              <h2>Configuring Hadoop</h2>
+              <p></p>
+              <pre>Modify the following files to complete the hadoop setup:
+                
+                $ su hduser
+            
+                 #add Variables in ~/.bashrc. Add these lines 
+            
+                  $ vim ~/.bashrc
+            
+                    # Set Hadoop-related environment variables
+                    export HADOOP_PREFIX=/usr/local/hadoop
+                    # Set JAVA_HOME (we will also configure JAVA_HOME directly for Hadoop later on)
+                    export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+                    # Some convenient aliases and functions for running Hadoop-related commands
+                    unalias fs &> /dev/null
+                    alias fs="hadoop fs"
+                    unalias hls &> /dev/null
+                    alias hls="fs -ls"
+                    # If you have LZO compression enabled in your Hadoop cluster and
+                    # compress job outputs with LZOP (not covered in this tutorial):
+                    # Conveniently inspect an LZOP compressed file from the command
+                    # line; run via:
+                    #
+                    # $ lzohead /hdfs/path/to/lzop/compressed/file.lzo
+                    #
+                    # Requires installed 'lzop' command.
+                    #
+                    lzohead () {
+                    hadoop fs -cat $1 | lzop -dc | head -1000 | less
+                    }
+                    # Add Hadoop bin/ directory to PATH
+                    export PATH=$PATH:$HADOOP_PREFIX/bin
+            
+            
+                  #reload .bashrc
+                  $ . ~/.bashrc
+            
+                  # test
+                  $ echo $HADOOP_PREFIX
+                    /usr/local/hadoop
+            
+                2. edit /usr/local/hadoop/conf/hadoop-env.sh. Verify this setting:
+            
+                  $ vim $HADOOP_PREFIX/conf/hadoop-env.sh
+            
+            
+                    # The java implementation to use.  Required.
+                    export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+            
+            
+                
+                
+                  $ su dothr
+                  $ sudo mkdir -p /app/hadoop/tmp
+                  $ sudo chown -R hduser:hadoop /app/hadoop/tmp
+                  $ sudo chmod 777 /app/hadoop/tmp
+                  $ su hduser</pre>
+                  <p>3. edit /usr/local/hadoop/conf/core-site.xml. Add these lines </p>
+                  <pre><code class="gen-command">$ vim $HADOOP_PREFIX/conf/core-site.xml</code></pre>
+                  <pre><xmp><configuration>
+    <property>
+      <name>hadoop.tmp.dir</name>
+      <value>/app/hadoop/tmp</value>
+      <description>A base for other temporary directories.</description>
+    </property>
+    
+    <property>
+      <name>fs.default.name</name>
+      <value>hdfs://localhost:54310</value>
+      <description>The name of the default file system. A URI whose
+      scheme and authority determine the FileSystem implementation. The
+      uri's scheme determines the config property (fs.SCHEME.impl) naming
+      the FileSystem implementation class. The uri's authority is used to
+      determine the host, port, etc. for a filesystem.</description>
+    </property>
+  </configuration></xmp></pre>
+            <p>4. edit /usr/local/hadoop/conf/mapred-site.xml. Add these lines </p>
+            <pre><code class="gen-command">$ vim $HADOOP_PREFIX/conf/mapred-site.xml</code></pre>
+            <pre><xmp><configuration>
+    <property>
+      <name>mapred.job.tracker</name>
+      <value>localhost:54311</value>
+      <description>The host and port that the MapReduce job tracker runs
+        at.  If "local", then jobs are run in-process as a single map
+        and reduce task.
+      </description>
+    </property>
+  </configuration></xmp></pre>
+            <p>5. edit /usr/local/hadoop/conf/hdfs-site.xml create directories for namenode and datanode.</p>
+            <pre><code class="gen-command">$ vim $HADOOP_PREFIX/conf/hdfs-site.xml</code></pre>
+            <pre><xmp><property>
+  <name>dfs.permissions</name>
+  <value>true</value>
+</property>
+<property>
+  <name>dfs.replication</name>
+  <value>1</value>
+  <description>Default block replication.
+    The actual number of replications can be specified when the file is created.
+    The default is used if replication is not specified in create time.
+  </description>
+</property>
+<property>
+  <name>dfs.permissions.supergroup</name>
+  <value>hadoop</value>
+</property>
+<property>
+  <name>dfs.web.ugi</name>
+  <value>hadoop</value>
+</property></xmp></pre>
+              <p>6.Format the New Hadoop Filesystem</p>
+              <pre><code class="gen-command">$ hadoop namenode -format</code>
+                Warning: $HADOOP_HOME is deprecated.
+                
+                19/02/06 18:28:48 INFO namenode.NameNode: STARTUP_MSG: 
+                /************************************************************
+                STARTUP_MSG: Starting NameNode
+                STARTUP_MSG:   host = dothr-asus/192.168.1.64
+                STARTUP_MSG:   args = [-format]
+                STARTUP_MSG:   version = 1.2.1
+                STARTUP_MSG:   build = https://svn.apache.org/repos/asf/hadoop/common/branches/branch-1.2 -r 1503152; compiled by 
+                'mattf' on Mon Jul 22 15:23:09 PDT 2013
+                STARTUP_MSG:   java = 1.8.0_201
+                ************************************************************/
+                19/02/06 18:28:48 INFO util.GSet: Computing capacity for map BlocksMap
+                19/02/06 18:28:48 INFO util.GSet: VM type       = 64-bit
+                19/02/06 18:28:48 INFO util.GSet: 2.0% max memory = 932184064
+                19/02/06 18:28:48 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+                19/02/06 18:28:48 INFO util.GSet: recommended=2097152, actual=2097152
+                19/02/06 18:28:48 INFO namenode.FSNamesystem: fsOwner=hduser
+                19/02/06 18:28:48 INFO namenode.FSNamesystem: supergroup=hadoop
+                19/02/06 18:28:48 INFO namenode.FSNamesystem: isPermissionEnabled=true
+                19/02/06 18:28:48 INFO namenode.FSNamesystem: dfs.block.invalidate.limit=100
+                19/02/06 18:28:48 INFO namenode.FSNamesystem: isAccessTokenEnabled=false accessKeyUpdateInterval=0 min(s), accessTokenLifetime=0 min(s)
+                19/02/06 18:28:48 INFO namenode.FSEditLog: dfs.namenode.edits.toleration.length = 0
+                19/02/06 18:28:48 INFO namenode.NameNode: Caching file names occuring more than 10 times 
+                19/02/06 18:28:48 INFO common.Storage: Image file /app/hadoop/tmp/dfs/name/current/fsimage of size 108 bytes saved in 0 seconds.
+                19/02/06 18:28:49 INFO namenode.FSEditLog: closing edit log: position=4, editlog=/app/hadoop/tmp/dfs/name/current/edits
+                19/02/06 18:28:49 INFO namenode.FSEditLog: close success: truncate to 4, editlog=/app/hadoop/tmp/dfs/name/current/edits
+                19/02/06 18:28:49 INFO common.Storage: Storage directory /app/hadoop/tmp/dfs/name has been successfully formatted.
+                19/02/06 18:28:49 INFO namenode.NameNode: SHUTDOWN_MSG: 
+                /************************************************************
+                SHUTDOWN_MSG: Shutting down NameNode at dothr-asus/192.168.1.64
+                ************************************************************/</pre>
+              <p>6. Start the hadoop</p>
+              <pre><code class="gen-command">$ start-all.sh</code>
+                Warning: $HADOOP_HOME is deprecated.
+
+                Warning: $HADOOP_HOME is deprecated.
+                
+                        starting namenode, logging to /usr/local/hadoop/libexec/../logs/hadoop-hduser-namenode-dothr-asus.out
+                        localhost: starting datanode, logging to /usr/local/hadoop/libexec/../logs/hadoop-hduser-datanode-dothr-asus.out
+                        localhost: starting secondarynamenode, logging to /usr/local/hadoop/libexec/../logs/hadoop-hduser-secondarynamenode-dothr-asus.out
+                        starting jobtracker, logging to /usr/local/hadoop/libexec/../logs/hadoop-hduser-jobtracker-dothr-asus.out
+                        localhost: starting tasktracker, logging to /usr/local/hadoop/libexec/../logs/hadoop-hduser-tasktracker-dothr-asus.out</pre>
+                <p>We can check if it's really up and running:</p>
+                <pre><code class="gen-command">$ jps</code>
+                        29808 SecondaryNameNode
+                        29620 DataNode
+                        30229 Jps
+                        29910 JobTracker
+                        30105 TaskTracker
+                        29357 NameNode
+                </pre>
+                <p>
+                  You can also check if Hadoop is listening on the configured ports. Open a new terminal and run</p>
+                <pre><code class="gen-command">$ sudo netstat -plten | grep java</code></pre>
+                <p>
+                  Note : Optionally, You can execute Hadoop by steps instead all processes as once :
+                  <code> $ start-dfs.sh 	$ start-mapred.sh</code>
+                </p>
+                <p>And stop them by: <code> $ stop-all.sh</code></p>
+                <p>Or: <code>stop-dfs.sh 	$ stop-mapred.sh</code></p>
+
+                <hr>
+                <p>
+                  Verify Services are up in the following links:      <br>
+                  NameNode daemon <a href="http://localhost:50070/" target="_blank">localhost:50070/ </a><br>
+                  Hadoop Jobtracker <a href="http://localhost:50030/jobtracker.jsp" target="_blank">localhost:50030/jobtracker.jsp</a>
+                </p>
+                <p>
+                  7. Test Hadoop
+                </p>
+                <pre class="gen-command">$ hadoop dfs -mkdir /user
+$ hadoop dfs -ls /app
+  Found 1 items
+  drwxr-xr-x   - hduser hadoop          0 2019-02-06 18:38 /app/hadoop
+$ hadoop dfs -rmr /user</pre>
+                <hr>
+            <!-- <p>Reference: <br>
+                <a href="LINK" target="_blank"> LINK /</a>
+            </p> -->
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Hadoop"; </script>

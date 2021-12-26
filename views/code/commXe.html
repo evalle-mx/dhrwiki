@@ -1,0 +1,103 @@
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Comandos XE</h1>
+<p class="mb-4">Muestra los principales comandos empleados para iniciar la aplicacion.</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">LocalHost</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>app/Tarea</th>
+                        <th>Comando</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>app/Tarea</th>
+                        <th>Comando</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td><b> Apache WebServer</b>
+                            <a href="https://www.cyberciti.biz/faq/star-stop-restart-apache2-webserver/"
+                                    target="_blank"> <i class="fas fa-globe"></i></a>
+                        </td>
+                        <td>
+                            $ sudo service apache2 start/stop/restart <br>
+                            $ sudo /etc/init.d/apache2 start/stop/restart <br>
+                            # /etc/init.d/apache2 start <br>
+                            systemctl [start/stop/restart] apache2.service
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Tomcat.8</b> &nbsp;&nbsp;&nbsp;<a href="http://127.0.0.1:8080/manager/html"
+                                target="_blank"><i class="fas fa-pager"></i></td>
+                        <td>
+                            sh /home/evalle/app/Tomcat-8/bin/startup.sh
+                            <!-- sudo sh /opt/tomcat/latest/bin/startup.sh -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Postgres in Docker</b></td>
+                        <td> docker <b>start</b> xe-postgres  / docker <b>stop</b> xe-postgres </td>
+                    </tr>
+                    <tr>
+                        <td><b>Redis (función)</b></td>
+                        <td>sudo systemctl start redis / sudo systemctl stop redis </td>
+                    </tr>
+                    <tr>
+                        <td><b>Redis (activo)</b></td>
+                        <td>redis-cli ping</td>
+                    </tr>
+                    <tr>
+                        <td><b>Permisos Contenido</b></td>
+                        <td>sudo chmod -R 777 /home/evalle/app/webServer/repository/</td>
+                    </tr>
+                    <tr>
+                        <td><b>App Files</b></td>
+                        <td title="sudo chown -R dothr:dothr /home/dothr/app/webServer/repository/docs/PER3">
+                            sudo chown -R evalle:evalle $HOME/logs <br>sudo chown -R evalle:evalle
+                            /home/evalle/app/webServer/repository/*</td>
+                    </tr>
+                    <!--<td>sudo /etc/init.d/redis-server start|stop|restart|force-reload|status</td></tr>-->
+                    <tr>
+                        <td><b>Chown logs</b></td>
+                        <td>sudo chown dothr -R $HOME/logs/* <br>sudo chown dothr /home/dothr/logs/Tomlogs/*</td>
+                    </tr>
+                    <tr>
+                        <td><b>Hadoop</b> (su hduser)</td>
+                        <td>start-all.sh</td>
+                    </tr>
+                    <tr>
+                        <td><b>Depurar Solr</b></td>
+                        <td>http://127.0.0.1:8080/solr/core/update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&commit=true
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Validar con Token </td>
+                        <td> <a href="http://127.0.0.1/talentwise/login.html#/validar/CD9823A47E4DE01126016A362C834CFF/correodemo@dhrtest.com"
+                                target="_blank">
+                                https://dothr.net/talentwise/login.html#/validar/CD9823A47E4DE01126016A362C834CFF/correo@test.com</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Java (Switch)</b></td>
+                        <td>
+                            $ sudo update-alternatives --config java <br>
+                            $ sudo update-alternatives --config javac <br>
+                            $ sudo gedit /etc/environment <br>
+                            $ source /etc/environment
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

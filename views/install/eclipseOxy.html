@@ -1,0 +1,130 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>IDE Eclipse (Oxygen)</h1>
+            
+            <h4>Binary</h4>
+
+            <p>
+                Download or Get tar gz file: <b>eclipse-jee-oxygen-RC2-linux-gtk-x86_64.tar.gz</b>, then unzip/untar into <b>/opt/</b> folder (<small>or in /usr/</small>).
+            </p>
+
+            <pre class="gen-command">$ cd $HOME/app
+$ wget  https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/oxygen/RC2/eclipse-jee-oxygen-RC2-linux-gtk-x86_64.tar.gz
+$ sudo tar xfz eclipse-jee-oxygen-RC2-linux-gtk-x86_64.tar.gz -C /opt/
+$ ls -l /opt/eclipse/</pre>
+            <pre>
+    total 636
+    -rw-r--r--   1 root root 293218 jun  1  2017 artifacts.xml
+    drwxr-xr-x   4 root root   4096 jun  1  2017 configuration
+    drwxr-xr-x   2 root root   4096 jun  1  2017 dropins
+    -rwxr-xr-x   1 root root  71431 may 24  2017 eclipse
+    -rw-r--r--   1 root root    584 jun  1  2017 eclipse.ini
+    drwxr-xr-x 177 root root  20480 jun  1  2017 features
+    -rwxr-xr-x   1 root root 140566 may 24  2017 icon.xpm
+    drwxr-xr-x   4 root root   4096 jun  1  2017 p2
+    drwxr-xr-x  21 root root  94208 jun  1  2017 plugins
+    drwxr-xr-x   2 root root   4096 jun  1  2017 readme</pre>
+
+            <p>
+                Next, <a href="https://linuxize.com/post/how-to-create-symbolic-links-in-linux-using-the-ln-command/" target="_blank">Symlink</a> 
+                the Eclipse executable to /usr/bin path so that other users on your machine can able to use Eclipse IDE from the command line.                    
+            </p>
+            <pre class="gen-command">$ sudo ln -s /opt/eclipse/eclipse /usr/local/sbin/eclipse
+        or
+$ sudo ln -s /usr/eclipse/eclipse /usr/bin/eclipse
+                    
+$ ls -l /usr/local/sbin/
+    total 0
+    lrwxrwxrwx 1 root root 20 feb 11 14:50 eclipse -> /opt/eclipse/eclipse</pre>
+            <p>
+           Next, create Eclipse desktop launcher icon into system applications directory.
+           </p>
+           <pre class="gen-command">$ sudo gedit /usr/share/applications/eclipse-oxygen.desktop</pre>
+            <p>
+                Add the following configuration into the file eclipse-oxygen.desktop, reference the corresponding executable file in <b>Exec</b> param.
+            </p>
+            <pre>
+    [Desktop Entry]
+    Name=Eclipse Oxygen
+    Comment=Eclipse Oxygen IDE
+    Type=Application
+    Encoding=UTF-8
+    <b>Exec=/usr/local/sbin/eclipse</b>
+    Icon=/opt/eclipse/icon.xpm
+    Categories=GNOME;Application;Development;
+    Terminal=false
+    StartupNotify=true</pre>
+
+
+            <h3> Additional Plugins</h3>
+
+            <p>
+                <h4>Gradle IDE Pack</h4>
+                Go to menu --> Help/eclipse Marketplace<br>
+                Put Gradle, search and install <b>Gradle IDE Pack 3.8.x+1.0.x+2.2.x</b> check all options and confirm<br>
+                Check "I accept the terms of the license agreement" and finish<br>
+                Install anyway and restart now.
+            </p>
+
+            <p>
+                <h4>Subclipse</h4>
+                Go to menu --> Help/eclipse Marketplace<br>
+                Put Subclipse, search and install <b>Subclipse 4.3.0</b>.<br>
+                Check all options and confirm<br>
+                Check "I accept the terms of the license agreement" and finish<br>
+                Install anyway and restart now.
+            </p>
+
+            <p>
+                <h4>Hibernate Tools</h4>
+                Go to menu --> Help/eclipse Marketplace<br>
+                Put: JBoss Tools, search and install <b>JBoss Tools 4.5.3.final</b> UNCHECK ALL options except Hibernate tools and confirm<br> 
+                Check "I accept the terms of the license agreement" and finish<br>
+                Install anyway and restart now.
+            </p>
+
+            <div class="panel panel-default ">
+                <div class="panel-body text-center">
+                    <img src="resource/img/install/eclipse_plugins.jpeg" class="img-responsive image-tuto-med" />
+                </div>
+            </div>
+
+            <h3> User Libraries</h3>
+
+            <p>
+                Using Gradle or Maven, developers do not need to manage .jar or plugins libraries, however, some projects can be written in old version, the repository has a list of
+                former used libraries in a file readable by eclipse: <b>EclipseLibs_2020.userlibraries</b>.
+            </p>
+            <p>
+                To import libraries, go to Window > preferences:<br>
+                Then Java / Build path / User libraries.
+            </p>
+            <p>
+                Click on Import button, search for respective .userlibraries file.  Then, <b>Apply and Close</b>.
+            </p>
+            <p style="font-size: 0.8em;">
+                <b>*.userlibraries</b><br>
+                In case that a file with userlibraries is not available, but exists access to former eclipse instalation, 
+                the User Library definitions are stored in the workspace; specifically, in 
+                <code>.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs</code>, just parse to appropriate XML format.
+            </p>
+
+            <hr>
+            <p>Reference: <br>
+                <a href="https://www.itzgeek.com/post/how-to-install-eclipse-ide-on-ubuntu-20-04/" target="_blank">https://www.itzgeek.com/post/how-to-install-eclipse-ide-on-ubuntu-20-04/</a><br>
+                <a href="https://www.tecmint.com/install-eclipse-oxygen-ide-in-ubuntu-debian/" target="_blank"> https://www.tecmint.com/install-eclipse-oxygen-ide-in-ubuntu-debian/ /</a><br>
+                <a href="https://wiki.eclipse.org/Eclipse/Installation" target="_blank"> Eclipse/Installation /</a><br>
+                <a href="https://wiki.eclipse.org/Eclipse.ini#-vm_value:_Linux_Example" target="_blank"> Eclipse.ini#-vm_value:_Linux_Example /</a><br>
+                <a href="https://wiki.eclipse.org/IRC_FAQ#I_just_installed_Eclipse_on_Linux.2C_but_it_does_not_start._What_is_the_problem.3F" target="_blank"> IRC_FAQ#I_just_installed_Eclipse_on_Linux.2C_but_it_does_not_start._What_is_the_problem.3F /</a><br>
+                <hr>
+                <a href="https://www.youtube.com/watch?v=T98qYIlEhlc" target="_blank">How to Install Subversive SVN Plug-In in Eclipse </a>
+
+            </p>
+            
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Eclipse Oxygen"; </script>

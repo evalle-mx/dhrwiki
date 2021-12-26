@@ -1,0 +1,135 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Tomcat 8.5.37</h1>
+            
+            <h3>Install Tomcat Server</h3>
+            <p>
+                Create corresponding app folder in home if is not created, move into directory, get the distribution binary zip and unzip
+            </p>
+            <pre class="gen-command">$ sudo dothr
+$ sudo mkdir -p $HOME/app
+$ cd $HOME/app
+<span style="color: green;">## preferably get from Project-Software folder, originaly was downloaded from:</span>
+$ wget http://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.37/bin/apache-tomcat-8.5.37.zip
+$ unzip apache-tomcat-*.zip</pre>
+            <p>
+                To have a formal installation, it is possible to move the installation to the 
+                corresponding system folder as Productive Practice. <br>
+                <u>The following is NOT NECESSARY for development environment. </u>
+            </p>
+            <pre class="gen-command">$ sudo mkdir -p /opt/tomcat
+$ sudo mv apache-tomcat-8.5.37 /opt/tomcat/</pre>
+            <p>
+                In order to have more control over versions and updates, we will create a 
+                <a href="https://linuxize.com/post/how-to-create-symbolic-links-in-linux-using-the-ln-command/" target="_blank">
+                    symbolic link</a> latest which will point to the Tomcat installation directory:
+            </p>
+            <pre class="gen-command"></pre>
+$ sudo ln -s /opt/tomcat/apache-tomcat-8.5.37 /opt/tomcat/latest
+$ sudo chmod +x /opt/tomcat/latest/bin/*.sh</pre>
+
+            <hr>
+            <h3>Users configuration</h3>
+            <p>
+                Next, create the <b>DotHR users</b> into the tomcat user configuration xml.
+            </p>
+            <pre class="gen-command"> $ sudo vim <b>&lt;TOMCAT_FOLDER&gt;</b>/conf/tomcat-users.xml</pre>            
+            <p>
+                and add the following code in the Users Section <b>&lt;tomcat-users&gt;</b>
+            </p>
+            <pre>&lt;role rolename="admin-gui"/&gt;
+&lt;role rolename="manager-gui"/&gt;
+&lt;user username="admin" password="tc34dm1n" roles="admin-gui,manager-gui"/&gt;</pre>
+
+            <h3>WAR maximun size deployment</h3>
+            <p>
+                WAR file's maximun size to deploy, Open to edit manager web.xml. Replace multipart config size:
+            </p>
+            <pre class="gen-command"> $ sudo vim /opt/tomcat/latest/webapps/manager/WEB-INF/web.xml </pre>
+            
+            <pre>&lt;multipart-config&gt;
+    &lt;!-- 80MB max --&gt;
+    &lt;max-file-size&gt;83886080&lt;/max-file-size&gt;
+    &lt;max-request-size&gt;83886080&lt;/max-request-size&gt;
+    &lt;file-size-threshold&gt;0&lt;/file-size-threshold&gt;
+&lt;/multipart-config&gt;</pre>
+            
+            <p> Port configuration (optional), to listen in 8090 <small>(Default is 8080)</small></p>
+            <pre class="gen-command">$ sudo vim /opt/tomcat/latest/conf/server.xml</pre>
+
+            <pre>&lt;Connector port="8090" protocol="HTTP/1.1"
+    connectionTimeout="20000"
+    redirectPort="8443" /&gt;</pre>
+            <p>
+                Start Server
+            </p>
+            <pre class="gen-command">$ sudo sh /opt/tomcat/latest/bin/startup.sh</pre>
+            <p>The server can be accessed through <a href="http://127.0.0.1:8090" target="_blank">http://localhost:8090</a> </p>
+
+            <div class="panel panel-default ">
+                <div class="panel-body text-center">
+                    <img src="resource/img/install/tomcat-def.jpeg" class="img-responsive image-tuto-med" />
+                </div>
+            </div>
+
+            <hr>
+            <h1>Solr 4.6.1</h1>
+            <p>Move into $HOME/app directory, get the distribution binary tar and unzip</p>
+            <pre class="gen-command">$ cd $HOME/app
+<span class="comentario">## preferably get from Project-Software folder, originaly was downloaded from:</span>
+$ wget http://archive.apache.org/dist/lucene/solr/4.6.1/solr-4.6.1.tgz
+$ tar -xvf solr-4.6.1.tgz</pre>
+            <p>
+                Once downloaded, it required to extract only the example folder distribution as the working instance for the project. <br>
+                Extracting the solr-4.6.1/example into working directory (<b>/opt/solr</b> or at home app folder <b>$HOME/app/solr</b>)
+            </p>
+            <pre class="gen-command">$ sudo cp -R solr-4.6.1/example /opt/solr
+$ cd /opt/solr</pre>
+
+            <p>
+                Set a reference to solr by creating a new file in Tomcat Server:
+            </p>
+            <pre class="gen-command">$ sudo vim /opt/tomcat/latest/conf/Catalina/localhost/solr.xml 
+            </pre>
+            <pre>&lt;Context docBase="/opt/solr/webapps/solr.war" debug="0" crossContext="true"&gt;
+&lt;Environment name="solr/home" type="java.lang.String" value="/opt/solr/solr" override="true" /&gt;
+&lt;/Context&gt;</pre>
+
+            <p>
+                Copy the required Solr jars <b>Tomcat-8/lib</b> folder
+                <ul>
+                    <li>log4j-1.2.16.jar </li>
+                    <li>jcl-over-slf4j-1.6.6.jar</li>
+                    <li>slf4j-api-1.6.6.jar</li>
+                    <li>slf4j-log4j12-1.6.6.jar</li>
+                </ul>
+            </p>
+            <pre class="gen-command">$ cd /opt/solr/lib/ext
+$ cp guava-14.0.1.jar log4j-1.2.16.jar jcl-over-slf4j-1.6.6.jar slf4j-api-1.6.6.jar slf4j-log4j12-1.6.6.jar /opt/tomcat/lib
+            </pre>
+            <p>
+                Restart Server
+            </p>
+            <pre class="gen-command">$ sudo sh /opt/tomcat/latest/bin/startup.sh
+$ sudo sh /opt/tomcat/latest/bin/shutdown.sh</pre>
+            <p>The server Should include Solr  <a href="http://127.0.0.1:8090" target="_blank">http://localhost:8090</a> </p>
+            <div class="panel panel-default ">
+                <div class="panel-body text-center">
+                    <img src="resource/img/install/solr-def.jpeg" class="img-responsive image-tuto-med" />
+                </div>
+            </div>
+
+
+            <!-- ________________________________________________________  -->
+            <hr>
+            <p>Reference: <br>
+                <a href="https://linuxize.com/post/how-to-install-tomcat-8-5-on-ubuntu-18.04/" target="_blank"> https://linuxize.com/post/how-to-install-tomcat-8-5-on-ubuntu-18.04/ /</a><br>
+                <a href="https://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-4.6.pdf" target="_blank"> apache-solr-ref-guide-4.6.pdf /</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Tomcat 8 and Solr"; </script>

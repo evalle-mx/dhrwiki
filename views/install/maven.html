@@ -1,0 +1,175 @@
+
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Maven</h1>
+
+            <div class="alert alert-warning" role="alert">
+                Maven requires Java <a href="#/instJava">JDK</a> or JRE version 7 or above to be installed.
+            </div>
+            
+           <h2>Installing Apache Maven on Ubuntu 20.04 with <code>apt</code></h2>
+
+           <p>Installing Maven on Ubuntu using <code>apt</code> is a simple, straightforward process.</p>
+
+           <p>Update the package index and install Maven by entering the following commands:</p>
+           <pre class="terminal"><code class="terminal-line" prefix="$">sudo apt update</code><code class="terminal-line" prefix="$">sudo apt install maven</code><button class="code-copy button main small" type="button">Copy</button><button class="code-copy button main small" type="button">Copy</button></pre>
+
+
+            <pre>
+Update the package index and install Maven by entering the following commands:
+
+sudo apt update
+sudo apt install maven
+CopyCopy
+To verify the installation, run mvn -version:
+
+mvn -version
+Copy
+The output should look something like this:
+
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 11.0.7, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "5.4.0-26-generic", arch: "amd64", family: "unix"
+Copy
+That’s it. Maven is now installed on your system, and you can start using 
+</pre>
+
+        
+        <div>
+            <h4> OR </h4>
+          <p>
+            First, <a href="../../download.html">download Maven</a> and follow the <a href="../../install.html">installation instructions</a>
+          </p>
+          <hr>
+
+            <p>
+                After that, type the following in a terminal or in a command prompt:
+            </p>
+            <div>
+                <pre>mvn --version</pre>
+            </div>
+            <p>It should print out your installed version of Maven, for example:</p>
+            <div>
+<pre>Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+Maven home: D:\apache-maven-3.6.3\apache-maven\bin\..
+Java version: 1.8.0_232, vendor: AdoptOpenJDK, runtime: C:\Program Files\AdoptOpenJDK\jdk-8.0.232.09-hotspot\jre
+Default locale: en_US, platform encoding: Cp1250
+OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"</pre></div>
+
+
+        
+        </div>
+
+        
+
+    
+
+        <hr>
+
+       <section>
+<h3 id="creating-a-project"><a name="Creating_a_Project"></a>Creating a Project<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#creating-a-project" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h3>
+<p>You need somewhere for your project to reside. Create a directory somewhere and start a shell in that directory. On your command line, execute the following Maven goal:</p>
+<div>
+
+
+    
+    <pre><code class="language-bash hljs">
+mvn archetype:generate 
+    -DgroupId={project-packaging}
+    -DartifactId={project-name}
+    -DarchetypeArtifactId={maven-template} 
+    -DinteractiveMode=<span class="hljs-literal">false</span>
+</code></pre>
+
+    <pre>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</pre>
+
+
+</div>
+<p><i>If you have just installed Maven, it may take a while on the first run. This is because Maven is downloading the most recent artifacts (plugin jars and other files) into your local repository. You may also need to execute the command a couple of times before it succeeds. This is because the remote server may time out before your downloads are complete. Don't worry, there are ways to fix that.</i></p>
+<p>You will notice that the <i>generate</i> goal created a directory with the same name given as the artifactId. Change into that directory.</p>
+<div>
+<pre>cd my-app</pre></div>
+<p>Under this directory you will notice the following <a href="../introduction/introduction-to-the-standard-directory-layout.html">standard project structure</a>.</p>
+<div>
+<pre>my-app
+|-- pom.xml
+`-- src
+    |-- main
+    |   `-- java
+    |       `-- com
+    |           `-- mycompany
+    |               `-- app
+    |                   `-- App.java
+    `-- test
+        `-- java
+            `-- com
+                `-- mycompany
+                    `-- app
+                        `-- AppTest.java</pre></div>
+<p>The <code>src/main/java</code> directory contains the project source code, the <code>src/test/java</code> directory contains the test source, and the <code>pom.xml</code> file is the project's Project Object Model, or POM.</p><section>
+<h4 id="the-pom"><a name="The_POM"></a>The POM<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#the-pom" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h4>
+<p>The <code>pom.xml</code> file is the core of a project's configuration in Maven. It is a single configuration file that contains the majority of information required to build a project in just the way you want. The POM is huge and can be daunting in its complexity, but it is not necessary to understand all of the intricacies just yet to use it effectively. This project's POM is:</p>
+<div class="source"><pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="tag">&lt;project</span><span class="pln"> </span><span class="atn">xmlns</span><span class="pun">=</span><span class="atv">"http://maven.apache.org/POM/4.0.0"</span><span class="pln"> </span><span class="atn">xmlns:xsi</span><span class="pun">=</span><span class="atv">"http://www.w3.org/2001/XMLSchema-instance"</span></li><li class="L1"><span class="pln">  </span><span class="atn">xsi:schemaLocation</span><span class="pun">=</span><span class="atv">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span></li><li class="L2"><span class="pln">  </span><span class="tag">&lt;modelVersion&gt;</span><span class="pln">4.0.0</span><span class="tag">&lt;/modelVersion&gt;</span></li><li class="L3"><span class="pln">&nbsp;</span></li><li class="L4"><span class="pln">  </span><span class="tag">&lt;groupId&gt;</span><span class="pln">com.mycompany.app</span><span class="tag">&lt;/groupId&gt;</span></li><li class="L5"><span class="pln">  </span><span class="tag">&lt;artifactId&gt;</span><span class="pln">my-app</span><span class="tag">&lt;/artifactId&gt;</span></li><li class="L6"><span class="pln">  </span><span class="tag">&lt;version&gt;</span><span class="pln">1.0-SNAPSHOT</span><span class="tag">&lt;/version&gt;</span></li><li class="L7"><span class="pln">&nbsp;</span></li><li class="L8"><span class="pln">  </span><span class="tag">&lt;properties&gt;</span></li><li class="L9"><span class="pln">    </span><span class="tag">&lt;maven.compiler.source&gt;</span><span class="pln">1.7</span><span class="tag">&lt;/maven.compiler.source&gt;</span></li><li class="L0"><span class="pln">    </span><span class="tag">&lt;maven.compiler.target&gt;</span><span class="pln">1.7</span><span class="tag">&lt;/maven.compiler.target&gt;</span></li><li class="L1"><span class="pln">  </span><span class="tag">&lt;/properties&gt;</span></li><li class="L2"><span class="pln">&nbsp;</span></li><li class="L3"><span class="pln">  </span><span class="tag">&lt;dependencies&gt;</span></li><li class="L4"><span class="pln">    </span><span class="tag">&lt;dependency&gt;</span></li><li class="L5"><span class="pln">      </span><span class="tag">&lt;groupId&gt;</span><span class="pln">junit</span><span class="tag">&lt;/groupId&gt;</span></li><li class="L6"><span class="pln">      </span><span class="tag">&lt;artifactId&gt;</span><span class="pln">junit</span><span class="tag">&lt;/artifactId&gt;</span></li><li class="L7"><span class="pln">      </span><span class="tag">&lt;version&gt;</span><span class="pln">4.12</span><span class="tag">&lt;/version&gt;</span></li><li class="L8"><span class="pln">      </span><span class="tag">&lt;scope&gt;</span><span class="pln">test</span><span class="tag">&lt;/scope&gt;</span></li><li class="L9"><span class="pln">    </span><span class="tag">&lt;/dependency&gt;</span></li><li class="L0"><span class="pln">  </span><span class="tag">&lt;/dependencies&gt;</span></li><li class="L1"><span class="tag">&lt;/project&gt;</span></li></ol></pre></div></section><section>
+<h4 id="what-did-i-just-do"><a name="What_did_I_just_do.3F"></a>What did I just do?<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#what-did-i-just-do" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h4>
+<p>You executed the Maven goal <i>archetype:generate</i>, and passed in various parameters to that goal. The prefix <i>archetype</i> is the <a href="../../plugins/index.html">plugin</a> that provides the goal. If you are familiar with <a class="externalLink" href="http://ant.apache.org">Ant</a>, you may conceive of this as similar to a task. This <i>archetype:generate</i> goal created a simple project based upon a <a href="/archetypes/maven-archetype-quickstart/">maven-archetype-quickstart</a> archetype. Suffice it to say for now that a <i>plugin</i> is a collection of <i>goals</i> with a general common purpose. For example the jboss-maven-plugin, whose purpose is "deal with various jboss items".</p></section><section>
+<h4 id="build-the-project"><a name="Build_the_Project"></a>Build the Project<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#build-the-project" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></h4>
+<div>
+<pre>mvn package</pre></div>
+<p>The command line will print out various actions, and end with the following:</p>
+<div>
+<pre> ...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.953 s
+[INFO] Finished at: 2019-11-24T13:05:10+01:00
+[INFO] ------------------------------------------------------------------------</pre></div>
+<p>Unlike the first command executed (<i>archetype:generate</i>), the second is simply a single word - <i>package</i>. Rather than a <i>goal</i>, this is a <i>phase</i>. A phase is a step in the <a href="../introduction/introduction-to-the-lifecycle.html">build lifecycle</a>, which is an ordered sequence of phases. When a phase is given, Maven executes every phase in the sequence up to and including the one defined. For example, if you execute the <i>compile</i> phase, the phases that actually get executed are:</p>
+<ol style="list-style-type: decimal">
+<li>validate</li>
+<li>generate-sources</li>
+<li>process-sources</li>
+<li>generate-resources</li>
+<li>process-resources</li>
+<li>compile</li></ol>
+<p>You may test the newly compiled and packaged JAR with the following command:</p>
+<div>
+<pre>java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App</pre></div>
+<p>Which will print the quintessential:</p>
+<div>
+<pre>Hello World!</pre></div></section></section>
+
+
+
+
+        <hr>
+        <!-- ______________________________________________________________________________________________________  -->
+        <!-- ______________________________________________________________________________________________________  -->
+
+        <p>
+                References: 
+                <ul>
+                    <li>
+                        <a href="https://linuxize.com/post/how-to-install-apache-maven-on-ubuntu-20-04/" target="_blank">
+                            How to Install Apache Maven on Ubuntu 20.04</a>
+                    </li>
+                    <li>
+                        <a href="https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html" target="_blank">
+                            Maven in 5 Minutes</a>
+                    </li>
+                    <li>
+                        <a href="https://mkyong.com/maven/how-to-create-a-java-project-with-maven/">Maven – How to create a Java project</a>
+                    </li>
+                </ul>
+
+        </p>
+
+        </div>
+    </div> <!-- //row -->
+</div>
+
+<script>document.title = "Install Maven"; </script>

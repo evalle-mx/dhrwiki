@@ -1,0 +1,119 @@
+<div ng-controller="installerCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Freeling-4.1</h1>
+            
+            <p>
+
+                <pre>1. Se requiere instalar los siguientes paquetes:
+
+                    $ sudo apt-get install build-essential g++
+                
+                2. Añadir el repositorio de xenial(ubuntu 16.04) a las listas de APT :
+                    $ sudo vim /etc/apt/sources.list
+                
+                        deb http://es.archive.ubuntu.com/ubuntu xenial main
+                        # deb-src http://es.archive.ubuntu.com/ubuntu xenial main
+                
+                3. Descargar e instalar freeling‑4.1‑xenial‑amd64.deb de https://github.com/TALP-UPC/FreeLing/releases
+                
+                
+                    $ cd /home/dothr/app
+                    $ wget https://github.com/TALP-UPC/FreeLing/releases/download/4.1/freeling-4.1-xenial-amd64.deb
+                    $ sudo dpkg -i freeling-4.1-xenial-amd64.deb
+                
+                        Seleccionando el paquete freeling previamente no seleccionado.
+                        (Leyendo la base de datos ... 213993 ficheros o directorios instalados actualmente.)
+                        Preparando para desempaquetar freeling-4.1-xenial-amd64.deb ...
+                        Desempaquetando freeling (4.1) ...
+                        dpkg: problemas de dependencias impiden la configuración de freeling:
+                         freeling depende de libboost-program-options1.58.0 (>= 1.58); sin embargo:
+                          El paquete `libboost-program-options1.58.0' no está instalado.
+                         freeling depende de libboost-regex1.58.0 (>= 1.58); sin embargo:
+                          El paquete `libboost-regex1.58.0' no está instalado.
+                         freeling depende de libboost-filesystem1.58.0 (>= 1.58); sin embargo:
+                          El paquete `libboost-filesystem1.58.0' no está instalado.
+                         freeling depende de libboost-system1.58.0 (>= 1.58); sin embargo:
+                          El paquete `libboost-system1.58.0' no está instalado.
+                         freeling depende de libicu55 (>= 55.1); sin embargo:
+                          El paquete `libicu55' no está instalado.
+                
+                        dpkg: error al procesar el paquete freeling (--install):
+                         problemas de dependencias - se deja sin configurar
+                        Se encontraron errores al procesar:
+                         freeling
+                
+                
+                    Arreglar dependencias 
+                    $ sudo apt --fix-broken install
+                
+                        Leyendo lista de paquetes... Hecho
+                        Creando árbol de dependencias       
+                        Leyendo la información de estado... Hecho
+                        Corrigiendo dependencias... Listo
+                        Se instalarán los siguientes paquetes adicionales:
+                          libboost-filesystem1.58.0 libboost-program-options1.58.0 libboost-regex1.58.0 libboost-system1.58.0 libicu55
+                        Se instalarán los siguientes paquetes NUEVOS:
+                          libboost-filesystem1.58.0 libboost-program-options1.58.0 libboost-regex1.58.0 libboost-system1.58.0 libicu55
+                        0 actualizados, 5 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+                        1 no instalados del todo o eliminados.
+                        Se necesita descargar 8 089 kB de archivos.
+                        Se utilizarán 32.7 MB de espacio de disco adicional después de esta operación.
+                        ¿Desea continuar? [S/n] s
+                        Des:1 http://es.archive.ubuntu.com/ubuntu xenial/main amd64 libboost-program-options1.58.0 amd64 1.58.0+dfsg-5ubuntu3 [138 kB]
+                        Des:2 http://es.archive.ubuntu.com/ubuntu xenial/main amd64 libicu55 amd64 55.1-7 [7 643 kB]
+                        Des:3 http://es.archive.ubuntu.com/ubuntu xenial/main amd64 libboost-regex1.58.0 amd64 1.58.0+dfsg-5ubuntu3 [261 kB]                       
+                        Des:4 http://es.archive.ubuntu.com/ubuntu xenial/main amd64 libboost-system1.58.0 amd64 1.58.0+dfsg-5ubuntu3 [9 038 B]                     
+                        Des:5 http://es.archive.ubuntu.com/ubuntu xenial/main amd64 libboost-filesystem1.58.0 amd64 1.58.0+dfsg-5ubuntu3 [37.6 kB]                 
+                        Descargados 8 089 kB en 15s (543 kB/s)                                                                                                     
+                        Seleccionando el paquete libboost-program-options1.58.0:amd64 previamente no seleccionado.
+                        (Leyendo la base de datos ... 215653 ficheros o directorios instalados actualmente.)
+                        Preparando para desempaquetar .../libboost-program-options1.58.0_1.58.0+dfsg-5ubuntu3_amd64.deb ...
+                        Desempaquetando libboost-program-options1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Seleccionando el paquete libicu55:amd64 previamente no seleccionado.
+                        Preparando para desempaquetar .../libicu55_55.1-7_amd64.deb ...
+                        Desempaquetando libicu55:amd64 (55.1-7) ...
+                        Seleccionando el paquete libboost-regex1.58.0:amd64 previamente no seleccionado.
+                        Preparando para desempaquetar .../libboost-regex1.58.0_1.58.0+dfsg-5ubuntu3_amd64.deb ...
+                        Desempaquetando libboost-regex1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Seleccionando el paquete libboost-system1.58.0:amd64 previamente no seleccionado.
+                        Preparando para desempaquetar .../libboost-system1.58.0_1.58.0+dfsg-5ubuntu3_amd64.deb ...
+                        Desempaquetando libboost-system1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Seleccionando el paquete libboost-filesystem1.58.0:amd64 previamente no seleccionado.
+                        Preparando para desempaquetar .../libboost-filesystem1.58.0_1.58.0+dfsg-5ubuntu3_amd64.deb ...
+                        Desempaquetando libboost-filesystem1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Configurando libicu55:amd64 (55.1-7) ...
+                        Configurando libboost-system1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Configurando libboost-regex1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Procesando disparadores para libc-bin (2.27-3ubuntu1) ...
+                        Configurando libboost-program-options1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Configurando libboost-filesystem1.58.0:amd64 (1.58.0+dfsg-5ubuntu3) ...
+                        Configurando freeling (4.1) ...
+                        Procesando disparadores para libc-bin (2.27-3ubuntu1) ...
+                
+                
+                    Comprobar que esta la version 1.58 
+                    $ dpkg --list | grep -i 'libboost-filesystem'
+                        ii  libboost-filesystem1.58.0:amd64            1.58.0+dfsg-5ubuntu3                         amd64        filesystem operations
+                         (portable paths, iteration over directories, etc) in C++
+                        ii  libboost-filesystem1.65.1:amd64            1.65.1+dfsg-0ubuntu5                         amd64        filesystem operations
+                         (portable paths, iteration over directories, etc) in C++
+                
+                
+                    Comprobar que se instalo freeling
+                    $ dpkg --list | grep -i 'freeling'
+                        ii  freeling             4.1            amd64        Library of natural language analysis facilities.
+                
+                4. quitar del repositorio de xenial(ubuntu 16.04) a las listas de APT :
+                    $ sudo vim /etc/apt/sources.list</pre>                
+            </p>
+            <p>Reference: <br>
+                <a href="https://talp-upc.gitbook.io/freeling-4-1-user-manual/installation#install-from-tar-gz-source-packages" target="_blank"> install-from-tar-gz-source-packages /</a><br>
+                <a href="https://rua.ua.es/dspace/bitstream/10045/80395/1/Un_estudio_del_uso_del_lenguaje_en_un_corpus_de_noticias_d_Razgovorov__Pavel.pdf" target="_blank"> estudio_del_uso_del_lenguaje_en_un_corpus_de_noticias_d_Razgovorov__Pavel.pdf /</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>document.title = "Install Freeling"; </script>

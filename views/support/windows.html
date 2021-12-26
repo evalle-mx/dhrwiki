@@ -1,0 +1,77 @@
+<div ng-controller="supportCtrl">
+    <div class="row " >
+        <div class="col-xs-12" >
+            
+            <h1>Windows to Ubuntu Support</h1>
+
+            <hr>
+            <h2>Clone a Windows 10 Hard Drive with Linux - Laptop SSD Upgrade.</h2>
+            
+            <div class="col-sm-6">
+                <!-- <h2>16:9 Responsive Aspect Ratio</h2> -->
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/W74An3pliJI" title="Clone Windows 10 " allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <p>
+                    Use Ubuntu Linux live USB to easily clone hard drive to SSD. <br/>
+                    Rufus - <a href="https://rufus.ie/" target="_blank">https://rufus.ie/</a>   <br/>
+                    
+                    Ubuntu - <a href="https://ubuntu.com/download/desktop" target="_blank">https://ubuntu.com/download/desktop</a>   <br/>
+                    
+                    Duplicate Disk Command:<br/>
+                    
+                    <pre class="gen-command">$ sudo dd if=/dev/sd* of=/dev/sd* status=progress</pre><br/>
+                    
+                    <i>NOTE: change * to your identified drive label</i>
+                </p>
+            <!-- 
+                <h2>4:3 Responsive Aspect Ratio and not full Screen available</h2>
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/W74An3pliJI" title="Clone Windows 10 "></iframe>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-sm" id="mdSmallCommands" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="text-align:center">Usefull Commands</h4>
+        </div>
+        <div class="modal-body">
+
+            # create database xe;<br>
+            # CREATE ROLE dothr with LOGIN ENCRYPTED PASSWORD 'tc34dm1n';<br>
+            # ALTER DATABASE xe OWNER TO dothr;<br>
+            # DROP USER dothr;<br>
+            # DROP DATABASE dothr;<br>
+
+            $ psql<br>
+
+            \conninfo<br>
+            \du<br>
+            \l<br>
+            \q<br>
+
+                
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>      
+    </div>
+  </div> <!-- end-Modal -->
+
+<script>document.title = "Install PostgreSql"; </script>
+
+<!--
+        TODO
+    separar en Tabs la instalacion hasta el punto de Crear usuario
+    agregar un acceso al modal de Comandos (mdSmallCommands)
+-->
