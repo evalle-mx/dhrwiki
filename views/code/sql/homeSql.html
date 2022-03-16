@@ -1,40 +1,38 @@
 <div class="container" ng-controller="codeviewCtrl">
-    <div class="content-header">
-        <span class="content-title">Consultas Sql</span>
-    </div>
     
+    <h1 class="h3 mb-4 text-gray-800">Consultas Sql</h1>
     
     <div class="row" >
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" data-target="#common">Add</a></li>
-            <li><a data-toggle="tab" data-target="#persona">Persona</a></li>
-            <li><a data-toggle="tab" data-target="#posicion">Posicion</a></li>
-            <li><a data-toggle="tab" data-target="#domicilio">Domicilio</a></li>
-            <li><a data-toggle="tab" data-target="#docclass">Doc Clas</a></li>
-            <li><a data-toggle="tab" data-target="#notificacion">Notificacion</a></li>
-            <li><a data-toggle="tab" data-target="#candidato">Candidato</a></li>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link active" href="" data-toggle="tab" data-target="#common">Conf</a></li>
+            <li class="nav-item"><a class="nav-link" href="" data-toggle="tab" data-target="#persona">Persona</a></li>
+            <li class="nav-item"><a class="nav-link" href="" data-toggle="tab" data-target="#posicion">Posicion</a></li>
+            <li class="nav-item"><a class="nav-link" href="" data-toggle="tab" data-target="#domicilio">Domicilio</a></li>
+            <li class="nav-item"><a class="nav-link" href="" data-toggle="tab" data-target="#docclass">Doc Clas</a></li>
+            <li class="nav-item"><a class="nav-link" href="" data-toggle="tab" data-target="#notificacion">Notificacion</a></li>
+            <li class="nav-item"><a class="nav-link" href="" data-toggle="tab" data-target="#candidato">Candidato</a></li>
         </ul>
 
         <div class="tab-content">
-            <div id="common" class="tab-pane fade in active">
+            <div id="common" class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
                 <common-sql></common-sql>
             </div>
-            <div id="persona" class="tab-pane fade">
+            <div id="persona" class="tab-pane fade" role="tabpanel">
                 <persona-sql></persona-sql>
             </div>
-            <div id="posicion" class="tab-pane fade">
+            <div id="posicion" class="tab-pane fade" role="tabpanel">
                 <posicion-sql></posicion-sql>
             </div>
-            <div id="domicilio" class="tab-pane fade">
+            <div id="domicilio" class="tab-pane fade" role="tabpanel">
                 <domicilio-sql></domicilio-sql>
             </div>
-            <div id="docclass" class="tab-pane fade">
+            <div id="docclass" class="tab-pane fade" role="tabpanel">
                 <docclass-sql></docclass-sql>
             </div>
-            <div id="notificacion" class="tab-pane fade">
+            <div id="notificacion" class="tab-pane fade" role="tabpanel">
                 <notificacion-sql></notificacion-sql>
             </div>
-            <div id="candidato" class="tab-pane fade">
+            <div id="candidato" class="tab-pane fade" role="tabpanel">
                 <candidato-sql></candidato-sql>
             </div>
             

@@ -105,16 +105,4 @@ wikiApp
     console.log('supportCtrl...');
 })
 
-
-
-.controller('midTermCtrl', function($scope, $rootScope,$routeParams, $location, $route, $templateCache, Archs){
-    console.log('midTermCtrl...');
-    document.title = "Topicos de primer Parcial";
-    $scope.topics = Archs.midterm();
-
-    console.log('topics: ', $scope.topics );
-
-    $scope.orderProp = 'id'; // attribute in json
-    $scope.orderdesc = false; //Descendent
-})
 ;

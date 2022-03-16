@@ -1,17 +1,37 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-      Agregar columna a tabla:
-    </div>
-    <div class="panel-body">
-      <pre>ALTER TABLE nombreTabla ADD COLUMN nombreColumna  boolean NOT NULL default false;</pre>
-    </div>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-      Verifica el numero de conexiones actuales:
+<div class="row">
+  <div class="col-lg-12 mt-2">
+    <div class="card shadow">
+      <!-- Card Header - Accordion -->
+      <a data-target="#conf-card1" href="" class="d-block card-header py-3" data-toggle="collapse"
+          role="button" aria-expanded="true" aria-controls="conf-card1">
+          <h6 class="m-0 font-weight-bold text-primary">Agregar columna a tabla:</h6>
+      </a>
+      <!-- Card Content - Collapse -->
+      <div class="collapse show" id="conf-card1">
+          <div class="card-body">
+            <pre>ALTER TABLE nombreTabla ADD COLUMN nombreColumna boolean NOT NULL default false;</pre>
+          </div>
+      </div>
     </div>
-    <div class="panel-body">
-      <pre>SELECT datname,usename,client_addr,waiting,query_start FROM pg_stat_activity;</pre>
+  </div> <!-- //col-lg-12-->
+
+
+  <div class="col-lg-12 mt-2">
+
+    <div class="card shadow mb-4">
+      <!-- Card Header - Accordion -->
+      <a data-target="#conf-card2" href="" class="d-block card-header py-3" data-toggle="collapse"
+          role="button" aria-expanded="true" aria-controls="conf-card2">
+          <h6 class="m-0 font-weight-bold text-primary">Verifica el numero de conexiones actuales</h6>
+      </a>
+      <!-- Card Content - Collapse -->
+      <div class="collapse show" id="conf-card2">
+          <div class="card-body">
+             <code>SELECT datname,usename,client_addr,waiting,query_start FROM pg_stat_activity;</code>
+          </div>
+      </div>
     </div>
-</div>
+  </div> <!-- //col-lg-12-->
+
+</div> <!-- //row-->
