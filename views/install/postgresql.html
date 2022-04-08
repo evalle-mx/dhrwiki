@@ -240,63 +240,11 @@ postgres=#\q
             <hr>
             <h3>Installing and manage PGAdmin3</h3>
             <p>
-                Install pgAdmin to administrative task<br>
-                <code>$ sudo apt-get install pgadmin3</code>
+                Go to reference installation of <a class="collapse-item" href="#/instPgAmin">PgAdmin</a>
             </p>
-
-            <p>After install DBMS, run the tool via terminal <code>$ pgadmin3</code> or using dock (windows Key)</p>
-            <p>Create a new connection and set the localhost params
-                <img src="resource/img/install/pgadmin1.jpeg" class="img-responsive image-tuto-med" />
-            </p>
-            <p>If everything is correct, the Xe Database will be able to been accessed</p>
-            <img src="resource/img/install/pgadmin2.jpeg" class="img-responsive image-tuto-med" />
-
-            <h4>Remote Connection</h4>
-            <p>For remote database connection, the DBMS instance must be configure. <small>[In formal local instalation, Docker is open for external connection by default]</small> <br>
-                You have to make PostgreSQL listening for remote incoming TCP connections because the default settings allow to listen only for connections on the loopback interface. <br>
-                <span class="gen-command">$ sudo gedit /etc/postgresql/<b>X.X</b>/main/postgresql.conf </span> and configure the following line:
-            </p>
-            <pre>listen_addresses = '*'</pre>
-
-            <p>PostgreSQL by default refuses all connections it receives from any remote address, you have to relax these rules by adding this line to 
-                <b>/etc/postgresql/X.X/main/pg_hba.conf</b>: <br>
-                <span class="gen-command">$ sudo gedit /etc/postgresql/X.X/main/pg_hba.conf </span> and configure the following line for IPv4:
-            </p>
-            <pre>host all all 0.0.0.0/0 md5</pre>
-
-            <p> When you have applied these modifications to your configuration files you need to restart PostgreSQL server. 
-                Now it is possible to login to your server remotely, using the username and password.
-                <span class="gen-command">$ sudo /etc/init.d/postgresql restart</span>.
-            </p>
-
-            <hr>
-
-            <h3>Installing pgAdmin4 in Ubuntu</h3>
-
-            <p>pgAdmin4 is not available in the Ubuntu repositories. We need to install it from the pgAdmin4 APT repository. 
-                Start by setting up the repository. Add the public key for the repository and create the repository configuration file.</p>
-            <pre class="gen-command">$ curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
-$ sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'</pre>
-
-            <p>Then install pgAdmin4</p>
-            <pre class="gen-command">$ sudo apt install pgadmin4</pre>
-
-            <p>The above command will install numerous required packages including Apache2 webserver to serve the pgadmin4-web application in web mode.</p>
-
-            <p>Once the installation is complete, run the web setup script which ships with the pgdmin4 binary package, to configure the system to run in web mode. You will be prompted to create a pgAdmin4 login email and password as shown in the screenshot below.</p>
-                
-            <p>This script will configure Apache2 to serve the pgAdmin4 web application which involves enabling the WSGI module and configuring the pgAdmin application to mount at pgadmin4 on the webserver so you can access it at</p>
-
-            <p>It also restarts the Apache2 service to apply the recent changes.<br>
-                Remember to set email address with a strong secure password as well:</p>
-            <pre class="gen-command">$ sudo /usr/pgadmin4/bin/setup-web.sh</pre>
-
-            <h5>Accessing pgAdmin4 Web Interface</h5>
-            <p>To access the pgAdmin4 web application interface, open a web browser, and use the following address to navigate:</p>
-            <pre>http://&lt;SERVER_IP&gt;/pgadmin4</pre>
-            <p>Once the login page loads, enter the email address and password you created in the previous section while configuring the pgAdmin4 to run in web mode.</p>
-
             
+
+
             <h4>Manage PostgreSQL Service</h4>
             <p> Use systemctl command to manage postgresql service:
                 <table class="table">

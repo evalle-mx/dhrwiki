@@ -1,0 +1,150 @@
+<div ng-controller="installerCtrl">
+    <div class="row">
+        <div class="col-xs-12" >
+            <hr>
+            <h2>Deploy PgAdmin4 with Docker</h2>
+
+            <h5> Find version </h5>
+            <p>
+                Go to <a href="https://hub.docker.com/r/dpage/pgadmin4/#!" target="_blank">Hub Docker</a> and search for the proper version of PgAdmin 
+            </p>
+
+            <h5>Pull image</h5>
+            <p> By using the command <code>docker pull dpage/pgadmin4</code></p>
+
+            <h5>Run image</h5>
+            <p>
+                Once downloaded, create a new instance with the following command:
+                <pre>docker run -p 8089:80 -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' -d dpage/pgadmin4</pre>                
+            </p>
+            <p>
+                Where:
+                <ul>
+                    <li><b>-p 8089:80</b> redirects to the Local port (browser:8089) the instance app port (pgadmin:80)</li>
+                    <li><b>-e 'PGADMIN_DEFAULT_EMAIL' & -e 'PGADMIN_DEFAULT_PASSWORD'</b> set the user and password for pgAdmin</li>
+                    <li><b>-d</b> runs instance in detached mode (terminal release)</li>
+                    <li><b>dpage/pgadmin4</b> the image for create new instance</li>
+                </ul>
+            </p>
+
+
+        </div> <!-- //col-xs-12 -->
+    </div> <!-- //Row-->    
+    <!-- _________________________________________________ -->
+    <hr>
+    <div class="row " >
+        
+        <div class="col-xs-12" >
+            <h3>Installing and manage PGAdmin3</h3>
+            <p>
+                Install pgAdmin to administrative task<br>
+                <code>$ sudo apt-get install pgadmin3</code>
+            </p>
+
+            <p>After install DBMS, run the tool via terminal <code>$ pgadmin3</code> or using dock (windows Key)</p>
+            <p>Create a new connection and set the localhost params
+                <img src="resource/img/install/pgadmin1.jpeg" class="img-responsive image-tuto-med" />
+            </p>
+            <p>If everything is correct, the Xe Database will be able to been accessed</p>
+            <img src="resource/img/install/pgadmin2.jpeg" class="img-responsive image-tuto-med" />
+
+            <h4>Remote Connection</h4>
+            <p>For remote database connection, the DBMS instance must be configure. <small>[In formal local instalation, Docker is open for external connection by default]</small> <br>
+                You have to make PostgreSQL listening for remote incoming TCP connections because the default settings allow to listen only for connections on the loopback interface. <br>
+                <span class="gen-command">$ sudo gedit /etc/postgresql/<b>X.X</b>/main/postgresql.conf </span> and configure the following line:
+            </p>
+            <pre>listen_addresses = '*'</pre>
+
+            <p>PostgreSQL by default refuses all connections it receives from any remote address, you have to relax these rules by adding this line to 
+                <b>/etc/postgresql/X.X/main/pg_hba.conf</b>: <br>
+                <span class="gen-command">$ sudo gedit /etc/postgresql/X.X/main/pg_hba.conf </span> and configure the following line for IPv4:
+            </p>
+            <pre>host all all 0.0.0.0/0 md5</pre>
+
+            <p> When you have applied these modifications to your configuration files you need to restart PostgreSQL server. 
+                Now it is possible to login to your server remotely, using the username and password.
+                <span class="gen-command">$ sudo /etc/init.d/postgresql restart</span>.
+            </p>
+
+            <hr>
+
+            <h3>Installing pgAdmin4 in Ubuntu</h3>
+
+            <p>pgAdmin4 is not available in the Ubuntu repositories. We need to install it from the pgAdmin4 APT repository. 
+                Start by setting up the repository. Add the public key for the repository and create the repository configuration file.</p>
+            <pre class="gen-command">$ curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+$ sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'</pre>
+
+            <p>Then install pgAdmin4</p>
+            <pre class="gen-command">$ sudo apt install pgadmin4</pre>
+
+            <p>The above command will install numerous required packages including Apache2 webserver to serve the pgadmin4-web application in web mode.</p>
+
+            <p>Once the installation is complete, run the web setup script which ships with the pgdmin4 binary package, to configure the system to run in web mode. You will be prompted to create a pgAdmin4 login email and password as shown in the screenshot below.</p>
+                
+            <p>This script will configure Apache2 to serve the pgAdmin4 web application which involves enabling the WSGI module and configuring the pgAdmin application to mount at pgadmin4 on the webserver so you can access it at</p>
+
+            <p>It also restarts the Apache2 service to apply the recent changes.<br>
+                Remember to set email address with a strong secure password as well:</p>
+            <pre class="gen-command">$ sudo /usr/pgadmin4/bin/setup-web.sh</pre>
+
+            <h5>Accessing pgAdmin4 Web Interface</h5>
+            <p>To access the pgAdmin4 web application interface, open a web browser, and use the following address to navigate:</p>
+            <pre>http://&lt;SERVER_IP&gt;/pgadmin4</pre>
+            <p>Once the login page loads, enter the email address and password you created in the previous section while configuring the pgAdmin4 to run in web mode.</p>
+
+        </div> <!-- //col-xs-12 -->
+    </div> <!-- //Row-->
+    <!-- _________________________________________________ -->    
+    
+    <div class="row">
+        <div class="col-xs-12" >
+            <hr>
+            <p>Reference: <br>
+                <a href="https://youtu.be/pVinuOO-vis" target="_blank">pgAdmin 4 Docker Image for PostgresQL</a><br>
+                <a href="https://hub.docker.com/r/dpage/pgadmin4/#!" target="_blank">Hub Docker: pgAdmin4</a>
+                <a href="https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/">https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu </a>
+            </p>
+        </div> <!-- //col-xs-12 -->
+    </div> <!-- //Row-->
+</div>
+
+
+<div class="modal fade bs-example-modal-sm" id="mdSmallCommands" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="text-align:center">Usefull Commands</h4>
+        </div>
+        <div class="modal-body">
+
+            # create database xe;<br>
+            # CREATE ROLE dothr with LOGIN ENCRYPTED PASSWORD 'tc34dm1n';<br>
+            # ALTER DATABASE xe OWNER TO dothr;<br>
+            # DROP USER dothr;<br>
+            # DROP DATABASE dothr;<br>
+
+            $ psql<br>
+
+            \conninfo<br>
+            \du<br>
+            \l<br>
+            \q<br>
+
+                
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>      
+    </div>
+  </div> <!-- end-Modal -->
+
+<script>document.title = "Install PostgreSql"; </script>
+
+<!--
+        TODO
+    separar en Tabs la instalacion hasta el punto de Crear usuario
+    agregar un acceso al modal de Comandos (mdSmallCommands)
+-->

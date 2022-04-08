@@ -48,6 +48,9 @@ wikiApp.config(function ($locationProvider, $routeProvider) {
   .when('/instPostgresql', {  /* postgresql */
     templateUrl: 'views/install/postgresql.html'
   })
+  .when('/instPgAmin', {  /* pgAdmin */
+    templateUrl: 'views/install/pgadmin.html'
+  })
   .when('/instHadoop', {  /* Hadoop */
     templateUrl: 'views/install/hadoop.html'    
   })
