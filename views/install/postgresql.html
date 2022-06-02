@@ -233,35 +233,60 @@ postgres=#\q
              Exit from the admin and terminal</p>
              
             
-            <pre class="gen-command">postgres=# \q;
+            <pre class="gen-command">postgres=# \q
             </pre>
+
+            <hr>
+
+            <h3>Postgresql Client </h3>
+            <p>
+                You can test server connections from other machines by using the PostgreSQL client.
+                <ul>
+                    <li><code>sudo apt install postgresql-client</code></li>
+                    <li><code>psql -h postgres.example.com -U postgres -W </code></li>
+                </ul>
+
+
+
             <!-- ____________________________________  -->
             
             <hr>
-            <h3>Installing and manage PGAdmin3</h3>
+            <h3>Next steps </h3>
             <p>
-                Go to reference installation of <a class="collapse-item" href="#/instPgAmin">PgAdmin</a>
+                <ul>
+                    <li><a class="collapse-item" href="#/instPgAmin">Installing and manage PGAdmin3</a></li>
+
+                </ul>
             </p>
             
 
 
-            <h4>Manage PostgreSQL Service</h4>
-            <p> Use systemctl command to manage postgresql service:
-                <table class="table">
-                    <tr><td class="gen-command">$ systemctl stop postgresql</td><td>stop service</td></tr>
-                    <tr><td class="gen-command">$ systemctl start postgresql</td><td>start service</td></tr>
-                    <tr><td class="gen-command">$ systemctl status postgresql</td><td>show status of service</td></tr>
-                    <tr><td class="gen-command">$ systemctl disable postgresql</td><td>disable service (not auto-start any more)</td></tr>
-                    <tr><td class="gen-command">$ systemctl enable postgresql</td><td>enable service postgresql (auto-start)</td></tr>
-                </table>
-            </p>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage PostgreSQL Service</h5>
+                    <p class="card-text">
+                        <table class="table">
+                        <tr><td class="gen-command">$ systemctl stop postgresql</td><td>stop service</td></tr>
+                        <tr><td class="gen-command">$ systemctl start postgresql</td><td>start service</td></tr>
+                        <tr><td class="gen-command">$ systemctl status postgresql</td><td>show status of service</td></tr>
+                        <tr><td class="gen-command">$ systemctl disable postgresql</td><td>disable service (not auto-start any more)</td></tr>
+                        <tr><td class="gen-command">$ systemctl enable postgresql</td><td>enable service postgresql (auto-start)</td></tr>
+                    </table>
+                    </p>
+                    <!-- <a class="card-link">Card link</a>
+                    <a class="card-link">Another link</a> -->
+                </div>
+            </div>
+
+            <br>
 
             <hr>
             <p>Reference: <br>
                 <a href="https://www.youtube.com/watch?v=aHbE3pTyG-Q" target="_blank">Docker and PostgreSQL in [10 Minutes]</a><br>
                 <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04" target="_blank">
                     https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04 </a><br>
-                <a href="https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/">https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu </a>
+                <a href="https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu/">https://www.tecmint.com/install-postgresql-and-pgadmin-in-ubuntu </a><br>
+                <a href="https://ubuntu.com/server/docs/databases-postgresql" target="_blank">Ubuntu Postgresql</a>
             </p>
 
             

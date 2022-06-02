@@ -27,6 +27,35 @@
                 </ul>
             </p>
 
+            <p>
+                Wait for 2 minutes until deploy, then  go to the pgAdmin <a href="http://localhost:8089/" target="_blank">home page</a> 
+                and login with the credentials <b>&lt;PGADMIN_DEFAULT_EMAIL&gt;</b> and <b>&lt;PGADMIN_DEFAULT_PASSWORD&gt;</b>
+            </p>            
+
+
+            <p>
+                Next, on the Servers tree, <b>Register</b> a new <b>Server</b>, this opens a new modal. <br>
+                In <i>General</i> tab, name it XE, on <i>Connection</i> Tab, type the Postgres Ip Address<b>*</b>, the correspondant Port, and the username and password defined for the admin
+            </p>
+            <p><img src="resource/img/install/pgadmin0.jpeg" class="img-responsive image-tuto-med" />
+            </p>
+
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">* Connect to Docker-Postgres</h5>
+                    <p class="card-text">For the case of connect to a postgres docker container running on the same device, we must obtain the correct IpAddress
+                    <div class="alert alert-info">
+                        To get the IpAddress used by a container:
+                        <code>docker inspect CONTAINER_ID  | grep IPAddress</code>
+                    </div></p>
+                    <!-- <a class="card-link">Card link</a>
+                    <a class="card-link">Another link</a> -->
+                </div>
+            </div>
+
+
+            
 
         </div> <!-- //col-xs-12 -->
     </div> <!-- //Row-->    

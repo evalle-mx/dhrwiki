@@ -63,17 +63,14 @@
 
             <h3>Managing the Apache Process </h3>
             <p>
-
-                <table class="table-hover">
-                    <caption>Basic management Commands</caption>
+                <caption>Basic management Commands</caption>
+                <table class="table-hover">                    
                     <tr><td class="gen-command">$ sudo systemctl start apache2</td><td>Start server</td></tr>
                     <tr><td class="gen-command">$ sudo systemctl stop apache2</td><td>Stop server</td></tr>
                     <tr><td class="gen-command">$ sudo systemctl restart apache2 </td><td>Restart server (To stop and then start the service again)</td></tr>
                     <tr><td class="gen-command">$ sudo systemctl reload apache2</td><td>Reload Changes (making configuration changes, reload without dropping connections)</td></tr>
                     <tr><td class="gen-command">$ sudo systemctl disable apache2</td><td>Disable automatically start at Boot (service)</td></tr>
                     <tr><td class="gen-command">$ sudo systemctl enable apache2</td><td>Enable service to start up at boot automatically</td></tr>
-
-
                 </table>
             </p>
 
@@ -132,11 +129,11 @@ $ chmod 666 index.html</pre>
             </p>
 
             <p>
-                Disable the default site defined in <b>000-default.conf</b>:
+                Disable the default site defined in <b>000-default.conf</b> [<small>a2</small>DIS<small>site</small>] :
                 <pre class="gen-command"> $ sudo a2dissite 000-default.conf</pre>
             </p>
             <p>
-                Enable the file with the a2ensite tool:
+                Enable the file new conf file <b>dothr.conf</b> with the a2ensite tool [<small>a2</small>EN<small>site</small>] :
                 <pre class="gen-command"> $ sudo a2ensite dothr.conf</pre>
             </p>
 
