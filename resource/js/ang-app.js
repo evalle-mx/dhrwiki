@@ -78,6 +78,10 @@ wikiApp.config(function ($locationProvider, $routeProvider) {
     templateUrl: 'views/additionalsw/git.html'    
   })
 
+  .when('/aws', {  /* AWS */
+    templateUrl: 'views/aws-home.html'    
+  })
+
 
   .when('/winlnx', {  /* Windows to Linux reference */
     templateUrl: 'views/support/windows.html'
