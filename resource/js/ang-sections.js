@@ -106,4 +106,29 @@ wikiApp
     };
   })
 
+/*   AWS   */
+/* aws-tuto */
+.directive('awsTuto', function() {  
+    return {
+      templateUrl: 'views/aws/awsTutorials.html'
+    };
+  })
+/* aws-vtuto */
+.directive('awsVtuto', function() {
+    return {
+      templateUrl: 'views/aws/videoTuto.html'
+    };
+  })
+/* aws-site */
+.directive('awsSite', function() {  
+    return {
+      templateUrl: 'views/aws/awsSite.html'
+    };
+  })
+/* aws-tips */
+.directive('awsTips', function() {  
+    return {
+      templateUrl: 'views/aws/awsTips.html'
+    };
+})
 ;
