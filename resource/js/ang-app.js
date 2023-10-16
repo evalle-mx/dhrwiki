@@ -77,9 +77,11 @@ wikiApp.config(function ($locationProvider, $routeProvider) {
   .when('/instGit', {  /* GIT */
     templateUrl: 'views/additionalsw/git.html'    
   })
-
   .when('/aws', {  /* AWS */
     templateUrl: 'views/aws-home.html'    
+  })
+  .when('/code', {  /* VSC */
+    templateUrl: 'views/additionalsw/vscode.html'    
   })
 
 
