@@ -104,16 +104,26 @@ $ sudo usermod -aG docker $USER</pre>
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Nginx</h5>
-                    <p class="card-text">
-                        a) Create a folder with the Web Content that will be used as webServer
-                        <br>                    
-                        b) Next download the image and create the container using the following command
-                        $ <code>docker run --name ngnixWebServer -p 80:80 -d -v /&lt;PATH_TO_webServer&gt;:/usr/share/nginx/html nginx</code><br>
+                    <ol type="a">
+                      <li>Create a folder with the Web Content that will be used as <b>webServer</b></li>
+                      <li>Pull nginx (latest) Image from Docker repo</li>
+                      <li>Instantiate the image to create the container</li>
+                    </ol>  
 
-                        Then the nginx Server will be running with the requested content on <a href="http://127.0.0.1/" target="_blank">Localhost</a>
-                    </p>
-                    <!-- <a class="card-link">Card link</a>
-                    <a class="card-link">Another link</a> -->
+                    <pre>docker version
+docker pull nginx
+docker ps -a
+docker stop docker-ngnix
+docker rm docker-ngnix
+
+#Running with default ports 
+docker run --name docker-ngnix -p 80:80 nginx
+# Running with default ports detached
+docker run --name docker-ngnix -p 80:80 -d nginx
+# Running with default ports targeting Volume (-v) detached [Linux]
+docker run --name docker-ngnix -p 80:80 -d -v  ~/docker-ngnix/html:/usr/share/nginx/html nginx
+# Running with default ports targeting Volume (-v) detached [Windows]
+docker run --name docker-ngnix -p 80:80 -d -v  C:\Users\myUser\docker-ngnix\html:/usr/share/nginx/html nginx</pre>
                 </div>
             </div>
 
